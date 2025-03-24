@@ -1,8 +1,11 @@
 <template>
   <div class="app-container">
-    <div class="custom-form"><iframe
+    <!--div class="custom-form">
+      <iframe
         src="http://www.liuhongtian.com:3000/d-solo/begdquzzg6vb4b/my-sample-dashboard?orgId=1&from=1727712000000&to=1743523199000&timezone=browser&theme=light&panelId=3&__feature.dashboardSceneSolo"
-        width="100%" height="400" frameborder="0"></iframe></div>
+        width="100%" height="400" frameborder="0">
+      </iframe>
+    </div-->
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="任务编码" prop="taskCode">
         <el-input v-model="queryParams.taskCode" placeholder="请输入任务编码" clearable @keyup.enter="handleQuery" />
@@ -53,42 +56,39 @@
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="taskList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="${comment}" align="center" prop="pkId" />
-      <el-table-column label="任务编码" align="center" prop="taskCode" />
-      <el-table-column label="任务名称" align="center" prop="taskName" />
-      <el-table-column label="运维人员" align="center" prop="operator" />
-      <el-table-column label="调度时间" align="center" prop="scheduleTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.scheduleTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="开始时间" align="center" prop="startTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="结束时间" align="center" prop="finishTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.finishTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="任务状态" align="center" prop="taskStatus" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:task:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['system:task:remove']">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="gantt-container">
+      <div class="gantt-header">
+        <div class="task-info-header">任务信息</div>
+        <div class="timeline-header">
+          <div v-for="date in timelineDates" :key="date" class="timeline-cell">
+            {{ formatDate(date) }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="gantt-body">
+        <div v-for="task in taskList" :key="task.pkId" class="gantt-row">
+          <div class="task-info">
+            <div class="task-code">{{ task.taskCode }}</div>
+            <div class="task-name">{{ task.taskName }}</div>
+            <div class="task-operator">{{ task.operator }}</div>
+          </div>
+          <div class="timeline">
+            <div class="task-bar" :style="getTaskBarStyle(task)">
+              <div v-for="(segment, index) in getTaskStatusSegments(task)" 
+                   :key="index" 
+                   class="task-status-segment"
+                   :style="segment">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize"
       @pagination="getList" />
 
-    <!-- 添加或修改水样采样任务对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="taskRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="任务编码" prop="taskCode">
@@ -159,6 +159,103 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+
+const timelineDates = ref([]);
+const statusColors = {
+  0: '#e6a23c',  // 已创建 - 橙色
+  1: '#409eff',  // 已调度 - 蓝色
+  2: '#67c23a',  // 执行中 - 绿色
+  3: '#909399'   // 执行结束 - 灰色
+};
+
+// 添加状态变更历史的数据结构
+const taskStatusHistory = ref({});
+
+function generateTimeline() {
+  const dates = [];
+  const startDate = new Date();
+  // 修改为显示过去30天到未来30天
+  for (let i = -30; i <= 30; i++) {
+    dates.push(new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000));
+  }
+  timelineDates.value = dates;
+}
+
+function formatDate(date) {
+  return `${date.getMonth() + 1}/${date.getDate()}`;
+}
+
+// 计算任务进度条的样式
+function getTaskBarStyle(task) {
+  const createTime = new Date(task.createTime);
+  const endTime = task.finishTime ? new Date(task.finishTime) : new Date();
+  
+  // 找到时间轴上的起始和结束位置
+  const startIndex = timelineDates.value.findIndex(date => 
+    date.getTime() >= createTime.getTime());
+  const endIndex = timelineDates.value.findIndex(date => 
+    date.getTime() >= endTime.getTime());
+  
+  if (startIndex === -1 || endIndex === -1) return {};
+  
+  return {
+    left: `${(startIndex / timelineDates.value.length) * 100}%`,
+    width: `${((endIndex - startIndex) / timelineDates.value.length) * 100}%`
+  };
+}
+
+// 获取任务状态段的样式
+function getTaskStatusSegments(task) {
+  const segments = [];
+  const createTime = new Date(task.createTime);
+  const endTime = task.finishTime ? new Date(task.finishTime) : new Date();
+  
+  // 定义状态变更点
+  const statusChanges = [
+    { time: createTime, status: 0 },  // 已创建
+    { time: task.scheduleTime ? new Date(task.scheduleTime) : null, status: 1 },  // 已调度
+    { time: task.startTime ? new Date(task.startTime) : null, status: 2 },  // 执行中
+    { time: task.finishTime ? new Date(task.finishTime) : null, status: 3 }  // 执行结束
+  ].filter(change => change.time !== null && change.time <= endTime);  // 过滤掉未发生的时间点和超过结束时间的时间点
+
+  // 按时间排序状态变更点
+  statusChanges.sort((a, b) => a.time - b.time);
+
+  // 如果没有状态变更点，显示单一状态
+  if (statusChanges.length === 0) {
+    return [{
+      left: '0%',
+      width: '100%',
+      backgroundColor: statusColors[0] || '#909399'
+    }];
+  }
+
+  // 计算每个状态段的宽度
+  for (let i = 0; i < statusChanges.length; i++) {
+    const currentChange = statusChanges[i];
+    const nextChange = statusChanges[i + 1];
+    
+    const startIndex = timelineDates.value.findIndex(date => 
+      date.getTime() >= currentChange.time.getTime());
+    const endIndex = nextChange 
+      ? timelineDates.value.findIndex(date => date.getTime() >= nextChange.time.getTime())
+      : timelineDates.value.findIndex(date => date.getTime() >= endTime.getTime());
+    
+    if (startIndex !== -1 && endIndex !== -1) {
+      segments.push({
+        left: `${(startIndex / timelineDates.value.length) * 100}%`,
+        width: `${((endIndex - startIndex) / timelineDates.value.length) * 100}%`,
+        backgroundColor: statusColors[currentChange.status] || '#909399'
+      });
+    }
+  }
+
+  return segments;
+}
+
+onMounted(() => {
+  generateTimeline();
+});
 
 /** 查询水样采样任务列表 */
 function getList() {
@@ -270,3 +367,93 @@ function handleExport() {
 
 getList();
 </script>
+
+<style scoped>
+.gantt-container {
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+.gantt-header {
+  display: flex;
+  border-bottom: 1px solid #dcdfe6;
+  background-color: #f5f7fa;
+}
+
+.task-info-header {
+  width: 300px;
+  padding: 12px;
+  border-right: 1px solid #dcdfe6;
+  font-weight: bold;
+}
+
+.timeline-header {
+  display: flex;
+  flex: 1;
+  overflow-x: auto;
+}
+
+.timeline-cell {
+  min-width: 40px;
+  padding: 8px;
+  text-align: center;
+  border-right: 1px solid #dcdfe6;
+}
+
+.gantt-body {
+  overflow-y: auto;
+  max-height: 600px;
+}
+
+.gantt-row {
+  display: flex;
+  border-bottom: 1px solid #ebeef5;
+  height: 60px;
+}
+
+.task-info {
+  width: 300px;
+  padding: 12px;
+  border-right: 1px solid #dcdfe6;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.task-code {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.task-name {
+  color: #606266;
+  margin-bottom: 4px;
+}
+
+.task-operator {
+  color: #909399;
+  font-size: 12px;
+}
+
+.timeline {
+  flex: 1;
+  position: relative;
+  overflow-x: auto;
+}
+
+.task-bar {
+  position: absolute;
+  height: 30px;
+  top: 15px;
+  background-color: #f0f2f5;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;  /* 添加flex布局 */
+}
+
+.task-status-segment {
+  height: 100%;
+  transition: all 0.3s ease;
+}
+</style>
