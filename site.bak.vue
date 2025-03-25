@@ -1,12 +1,12 @@
-<template>
+<template> 
   <div class="app-container">
     <TestDialog v-model:visible="dialogVisible"></TestDialog>
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="监测站名称" prop="siteName">
         <el-input
           v-model="queryParams.siteName"
           placeholder="请输入监测站名称"
-          clearable style="width: 200px"
+          clearable
           @keyup.enter="handleQuery"
         />
       </el-form-item>
@@ -30,62 +30,13 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="经度" prop="longitude">
-        <el-input
-          v-model="queryParams.longitude"
-          placeholder="请输入经度"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="纬度" prop="latitude">
-        <el-input
-          v-model="queryParams.latitude"
-          placeholder="请输入纬度"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="站点编码" prop="siteCode">
-        <el-input
-          v-model="queryParams.siteCode"
-          placeholder="请输入站点编码"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="地址" prop="address">
-        <el-input
-          v-model="queryParams.address"
-          placeholder="请输入地址"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="负责人" prop="manager">
-        <el-input
-          v-model="queryParams.manager"
-          placeholder="请输入负责人"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="电话" prop="phone">
-        <el-input
-          v-model="queryParams.phone"
-          placeholder="请输入电话"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
+      <el-form-item>
+        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="openDialog">自定义表单样例</el-button>
       </el-form-item>
-      <hr/>
-      <div style="width: 100%; text-align: right;"><el-form-item>
-        <el-button type="primary" icon="Search" style="width: 100px" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" style="width: 100px" @click="resetQuery">重置</el-button>
-      </el-form-item></div>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
@@ -131,37 +82,31 @@
     </el-row>
 
     <el-table v-loading="loading" :data="siteList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
-      <el-table-column type="selection" width="55" align="center" fixed="left" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="left">
-        <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:site:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:site:remove']">删除</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="主键" align="center" prop="siteId" :sort-orders="['descending', 'ascending']" sortable="custom" />
-      <el-table-column label="监测站名称" align="center" prop="siteName" :sort-orders="['descending', 'ascending']" sortable="custom" />
-      <el-table-column label="监测站类型" align="center" prop="siteType" :sort-orders="['descending', 'ascending']" sortable="custom" >
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="主键" align="center" prop="siteId" :sort-orders="['descending', 'ascending']" sortable="custom"/>
+      <el-table-column label="监测站名称" align="center" prop="siteName" :sort-orders="['descending', 'ascending']" sortable="custom"/>
+      <el-table-column label="监测站类型" align="center" prop="siteType" :sort-orders="['descending', 'ascending']" sortable="custom">
         <template #default="scope">
           <dict-tag :options="msite_type" :value="scope.row.siteType"/>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" prop="status" :sort-orders="['descending', 'ascending']" sortable="custom">
         <template #default="scope">
           <dict-tag :options="msite_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180" :sort-orders="['descending', 'ascending']" sortable="custom" >
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180" :sort-orders="['descending', 'ascending']" sortable="custom">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="经度" align="center" prop="longitude" />
-      <el-table-column label="纬度" align="center" prop="latitude" />
-      <el-table-column label="站点编码" align="center" prop="siteCode" />
-      <el-table-column label="地址" align="center" prop="address" />
-      <el-table-column label="负责人" align="center" prop="manager" />
-      <el-table-column label="电话" align="center" prop="phone" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template #default="scope">
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:site:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:site:remove']">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     
     <pagination
@@ -200,24 +145,6 @@
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="经度" prop="longitude">
-          <el-input v-model="form.longitude" placeholder="请输入经度" />
-        </el-form-item>
-        <el-form-item label="纬度" prop="latitude">
-          <el-input v-model="form.latitude" placeholder="请输入纬度" />
-        </el-form-item>
-        <el-form-item label="站点编码" prop="siteCode">
-          <el-input v-model="form.siteCode" placeholder="请输入站点编码" />
-        </el-form-item>
-        <el-form-item label="地址" prop="address">
-          <el-input v-model="form.address" placeholder="请输入地址" />
-        </el-form-item>
-        <el-form-item label="负责人" prop="manager">
-          <el-input v-model="form.manager" placeholder="请输入负责人" />
-        </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入电话" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -266,12 +193,6 @@ const data = reactive({
     siteName: null,
     siteType: null,
     status: null,
-    longitude: null,
-    latitude: null,
-    siteCode: null,
-    address: null,
-    manager: null,
-    phone: null
   },
   rules: {
   }
@@ -279,7 +200,7 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 处理排序 */
+// 处理排序
 function handleSortChange(column) {
   queryParams.value.orderByColumn = column.prop; //查询字段是表格中字段名字
   queryParams.value.isAsc = column.order; //动态取值排序顺序
@@ -313,13 +234,7 @@ function reset() {
     createTime: null,
     updateBy: null,
     updateTime: null,
-    remark: null,
-    longitude: null,
-    latitude: null,
-    siteCode: null,
-    address: null,
-    manager: null,
-    phone: null
+    remark: null
   };
   proxy.resetForm("siteRef");
 }

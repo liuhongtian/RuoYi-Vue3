@@ -75,6 +75,10 @@
 }
 
 .el-table {
+  width: auto;
+}
+
+.el-table {
   .el-table__header-wrapper, .el-table__fixed-header-wrapper {
     th {
       word-break: break-word;

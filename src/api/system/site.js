@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+// 查询监测站点列表（不分页）
+export function listSiteAll(query) {
+  return request({
+    url: '/system/site/listall',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询监测站点列表
 export function listSite(query) {
   return request({

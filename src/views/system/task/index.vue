@@ -6,35 +6,36 @@
         width="100%" height="400" frameborder="0">
       </iframe>
     </div-->
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
       <el-form-item label="任务编码" prop="taskCode">
-        <el-input v-model="queryParams.taskCode" placeholder="请输入任务编码" clearable @keyup.enter="handleQuery" />
+        <el-input v-model="queryParams.taskCode" placeholder="请输入任务编码" clearable style="width: 200px" @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="任务名称" prop="taskName">
-        <el-input v-model="queryParams.taskName" placeholder="请输入任务名称" clearable @keyup.enter="handleQuery" />
+        <el-input v-model="queryParams.taskName" placeholder="请输入任务名称" clearable style="width: 200px" @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="运维人员" prop="operator">
-        <el-input v-model="queryParams.operator" placeholder="请输入运维人员" clearable @keyup.enter="handleQuery" />
+        <el-input v-model="queryParams.operator" placeholder="请输入运维人员" clearable style="width: 200px" @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="调度时间" prop="scheduleTime">
         <el-date-picker clearable v-model="queryParams.scheduleTime" type="date" value-format="YYYY-MM-DD"
-          placeholder="请选择调度时间">
+          placeholder="请选择调度时间" style="width: 200px">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="开始时间" prop="startTime">
         <el-date-picker clearable v-model="queryParams.startTime" type="date" value-format="YYYY-MM-DD"
-          placeholder="请选择开始时间">
+          placeholder="请选择开始时间" style="width: 200px">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="结束时间" prop="finishTime">
         <el-date-picker clearable v-model="queryParams.finishTime" type="date" value-format="YYYY-MM-DD"
-          placeholder="请选择结束时间">
+          placeholder="请选择结束时间" style="width: 200px">
         </el-date-picker>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-form-item>
+      <hr/>
+      <div style="width: 100%; text-align: right;"><el-form-item>
+        <el-button type="primary" icon="Search" style="width: 100px" @click="handleQuery">搜索</el-button>
+        <el-button icon="Refresh" style="width: 100px" @click="resetQuery">重置</el-button>
+      </el-form-item></div>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
