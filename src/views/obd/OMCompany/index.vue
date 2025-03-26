@@ -184,7 +184,18 @@ const areaProps = ref({
 
 function getAreaOptions() {
   // TODO 发起请求获取数据
-  areaOptions.value
+  // 获取省份
+  getProvinceList().then(response => {
+    areaOptions.value = response.data;
+  });
+}
+
+function getCityList(provinceId) {
+  // TODO 发起请求获取数据
+  // 获取城市
+  getCityList(provinceId).then(response => {
+    areaOptions.value = response.data;
+  });
 }
 
 const data = reactive({
