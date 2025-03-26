@@ -73,7 +73,7 @@
          <el-table-column label="序号" align="center" prop="noticeId" width="100" />
          <el-table-column
             label="公告标题"
-            align="center"
+            align="left"
             prop="noticeTitle"
             :show-overflow-tooltip="true"
          />
