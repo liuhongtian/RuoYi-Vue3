@@ -92,7 +92,6 @@
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['obd:City:remove']">删除</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="主键" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="pkId" />
       <el-table-column label="序号" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="seqNo" />
       <el-table-column label="省份" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="provinceId">
         <template #default="scope">

@@ -1,88 +1,8 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="序号" prop="seqNo">
-        <el-input
-          v-model="queryParams.seqNo"
-          placeholder="请输入序号"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="地区编码" prop="areaId">
-        <el-input
-          v-model="queryParams.areaId"
-          placeholder="请输入地区编码"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="地区名称" prop="areaName">
-        <el-input
-          v-model="queryParams.areaName"
-          placeholder="请输入地区名称"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <hr/>
-      <div style="width: 100%; text-align: right;"><el-form-item>
-        <el-button type="primary" icon="Search" style="width: 100px" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" style="width: 100px" @click="resetQuery">重置</el-button>
-      </el-form-item></div>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['obd:Area:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['obd:Area:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['obd:Area:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['obd:Area:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
 
     <el-table v-loading="loading" :data="AreaList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" fixed="left" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="left">
-        <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:Area:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['obd:Area:remove']">删除</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="主键" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="pkId" />
       <el-table-column label="序号" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="seqNo" />
       <el-table-column label="地区编码" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="areaId" />
       <el-table-column label="地区名称" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="areaName" />

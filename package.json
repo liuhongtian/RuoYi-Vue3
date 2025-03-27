@@ -1,7 +1,7 @@
 {
   "name": "ruoyi",
   "version": "3.8.9",
-  "description": "环境监测运维管理系统",
+  "description": "演示环境",
   "author": "清华",
   "license": "MIT",
   "type": "module",

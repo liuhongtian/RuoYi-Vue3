@@ -43,35 +43,6 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['obd:WeatherInfo:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['obd:WeatherInfo:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['obd:WeatherInfo:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="warning"
           plain
           icon="Download"
@@ -83,13 +54,6 @@
     </el-row>
 
     <el-table v-loading="loading" :data="WeatherInfoList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
-      <el-table-column type="selection" width="55" align="center" fixed="left" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="left">
-        <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:WeatherInfo:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['obd:WeatherInfo:remove']">删除</el-button>
-        </template>
-      </el-table-column>
       <el-table-column label="日期" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="weatherDate" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.weatherDate, '{y}-{m}-{d}') }}</span>

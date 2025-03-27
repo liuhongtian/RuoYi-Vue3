@@ -1,26 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="序号" prop="seqNo">
+      <el-form-item label="水体编码" prop="aquaticCode">
         <el-input
-          v-model="queryParams.seqNo"
-          placeholder="请输入序号"
+          v-model="queryParams.aquaticCode"
+          placeholder="请输入水体编码"
           clearable style="width: 200px"
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="省份编码" prop="provinceId">
+      <el-form-item label="水体名称" prop="aquaticName">
         <el-input
-          v-model="queryParams.provinceId"
-          placeholder="请输入省份编码"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="省份名称" prop="provinceName">
-        <el-input
-          v-model="queryParams.provinceName"
-          placeholder="请输入省份名称"
+          v-model="queryParams.aquaticName"
+          placeholder="请输入水体名称"
           clearable style="width: 200px"
           @keyup.enter="handleQuery"
         />
@@ -39,7 +31,7 @@
           plain
           icon="Plus"
           @click="handleAdd"
-          v-hasPermi="['obd:Province:add']"
+          v-hasPermi="['obd:AquaticInfo:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -49,7 +41,7 @@
           icon="Edit"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['obd:Province:edit']"
+          v-hasPermi="['obd:AquaticInfo:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -59,7 +51,7 @@
           icon="Delete"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['obd:Province:remove']"
+          v-hasPermi="['obd:AquaticInfo:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -68,23 +60,22 @@
           plain
           icon="Download"
           @click="handleExport"
-          v-hasPermi="['obd:Province:export']"
+          v-hasPermi="['obd:AquaticInfo:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="ProvinceList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
+    <el-table v-loading="loading" :data="AquaticInfoList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" fixed="left" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="left">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:Province:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['obd:Province:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:AquaticInfo:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['obd:AquaticInfo:remove']">删除</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="序号" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="seqNo" />
-      <el-table-column label="省份编码" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="provinceId" />
-      <el-table-column label="省份名称" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="provinceName" />
+      <el-table-column label="水体编码" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="aquaticCode" />
+      <el-table-column label="水体名称" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="aquaticName" />
     </el-table>
     
     <pagination
@@ -95,17 +86,14 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改省份信息对话框 -->
+    <!-- 添加或修改水体信息对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="ProvinceRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="序号" prop="seqNo">
-          <el-input v-model="form.seqNo" placeholder="请输入序号" />
+      <el-form ref="AquaticInfoRef" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="水体编码" prop="aquaticCode">
+          <el-input v-model="form.aquaticCode" placeholder="请输入水体编码" />
         </el-form-item>
-        <el-form-item label="省份编码" prop="provinceId">
-          <el-input v-model="form.provinceId" placeholder="请输入省份编码" />
-        </el-form-item>
-        <el-form-item label="省份名称" prop="provinceName">
-          <el-input v-model="form.provinceName" placeholder="请输入省份名称" />
+        <el-form-item label="水体名称" prop="aquaticName">
+          <el-input v-model="form.aquaticName" placeholder="请输入水体名称" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -118,12 +106,12 @@
   </div>
 </template>
 
-<script setup name="Province">
-import { listProvince, getProvince, delProvince, addProvince, updateProvince } from "@/api/obd/Province";
+<script setup name="AquaticInfo">
+import { listAquaticInfo, getAquaticInfo, delAquaticInfo, addAquaticInfo, updateAquaticInfo } from "@/api/obd/AquaticInfo";
 
 const { proxy } = getCurrentInstance();
 
-const ProvinceList = ref([]);
+const AquaticInfoList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
@@ -138,9 +126,8 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    seqNo: null,
-    provinceId: null,
-    provinceName: null
+    aquaticCode: null,
+    aquaticName: null
   },
   rules: {
   }
@@ -148,11 +135,11 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询省份信息列表 */
+/** 查询水体信息列表 */
 function getList() {
   loading.value = true;
-  listProvince(queryParams.value).then(response => {
-    ProvinceList.value = response.rows;
+  listAquaticInfo(queryParams.value).then(response => {
+    AquaticInfoList.value = response.rows;
     total.value = response.total;
     loading.value = false;
   });
@@ -168,12 +155,10 @@ function cancel() {
 function reset() {
   form.value = {
     pkId: null,
-    seqNo: null,
-    countryId: null,
-    provinceId: null,
-    provinceName: null
+    aquaticCode: null,
+    aquaticName: null
   };
-  proxy.resetForm("ProvinceRef");
+  proxy.resetForm("AquaticInfoRef");
 }
 
 /** 搜索按钮操作 */
@@ -206,32 +191,32 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加省份信息";
+  title.value = "添加水体信息";
 }
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
   const _pkId = row.pkId || ids.value
-  getProvince(_pkId).then(response => {
+  getAquaticInfo(_pkId).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改省份信息";
+    title.value = "修改水体信息";
   });
 }
 
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs["ProvinceRef"].validate(valid => {
+  proxy.$refs["AquaticInfoRef"].validate(valid => {
     if (valid) {
       if (form.value.pkId != null) {
-        updateProvince(form.value).then(response => {
+        updateAquaticInfo(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
           getList();
         });
       } else {
-        addProvince(form.value).then(response => {
+        addAquaticInfo(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
           getList();
@@ -244,8 +229,8 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _pkIds = row.pkId || ids.value;
-  proxy.$modal.confirm('是否确认删除省份信息编号为"' + _pkIds + '"的数据项？').then(function() {
-    return delProvince(_pkIds);
+  proxy.$modal.confirm('是否确认删除水体信息编号为"' + _pkIds + '"的数据项？').then(function() {
+    return delAquaticInfo(_pkIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
@@ -254,9 +239,9 @@ function handleDelete(row) {
 
 /** 导出按钮操作 */
 function handleExport() {
-  proxy.download('obd/Province/export', {
+  proxy.download('obd/AquaticInfo/export', {
     ...queryParams.value
-  }, `Province_${new Date().getTime()}.xlsx`)
+  }, `AquaticInfo_${new Date().getTime()}.xlsx`)
 }
 
 getList();

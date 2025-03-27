@@ -39,7 +39,7 @@
           plain
           icon="Plus"
           @click="handleAdd"
-          v-hasPermi="['obd:Province:add']"
+          v-hasPermi="['obd:Province2:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -49,7 +49,7 @@
           icon="Edit"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['obd:Province:edit']"
+          v-hasPermi="['obd:Province2:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -59,7 +59,7 @@
           icon="Delete"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['obd:Province:remove']"
+          v-hasPermi="['obd:Province2:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -68,20 +68,21 @@
           plain
           icon="Download"
           @click="handleExport"
-          v-hasPermi="['obd:Province:export']"
+          v-hasPermi="['obd:Province2:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="ProvinceList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
+    <el-table v-loading="loading" :data="Province2List" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" fixed="left" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="left">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:Province:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['obd:Province:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:Province2:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['obd:Province2:remove']">删除</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="主键" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="pkId" />
       <el-table-column label="序号" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="seqNo" />
       <el-table-column label="省份编码" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="provinceId" />
       <el-table-column label="省份名称" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="provinceName" />
@@ -97,7 +98,7 @@
 
     <!-- 添加或修改省份信息对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="ProvinceRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="Province2Ref" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="序号" prop="seqNo">
           <el-input v-model="form.seqNo" placeholder="请输入序号" />
         </el-form-item>
@@ -107,6 +108,34 @@
         <el-form-item label="省份名称" prop="provinceName">
           <el-input v-model="form.provinceName" placeholder="请输入省份名称" />
         </el-form-item>
+        <el-divider content-position="center">城市信息信息</el-divider>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button type="primary" icon="Plus" @click="handleAddIniCity">添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="danger" icon="Delete" @click="handleDeleteIniCity">删除</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="iniCityList" :row-class-name="rowIniCityIndex" @selection-change="handleIniCitySelectionChange" ref="iniCity">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="序号" prop="seqNo" width="150">
+            <template #default="scope">
+              <el-input v-model="scope.row.seqNo" placeholder="请输入序号" />
+            </template>
+          </el-table-column>
+          <el-table-column label="城市编码" prop="cityId" width="150">
+            <template #default="scope">
+              <el-input v-model="scope.row.cityId" placeholder="请输入城市编码" />
+            </template>
+          </el-table-column>
+          <el-table-column label="城市名称" prop="cityName" width="150">
+            <template #default="scope">
+              <el-input v-model="scope.row.cityName" placeholder="请输入城市名称" />
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -118,16 +147,19 @@
   </div>
 </template>
 
-<script setup name="Province">
-import { listProvince, getProvince, delProvince, addProvince, updateProvince } from "@/api/obd/Province";
+<script setup name="Province2">
+import { listProvince2, getProvince2, delProvince2, addProvince2, updateProvince2 } from "@/api/obd/Province2";
 
 const { proxy } = getCurrentInstance();
+const { ini_province } = proxy.useDict('ini_province');
 
-const ProvinceList = ref([]);
+const Province2List = ref([]);
+const iniCityList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
+const checkedIniCity = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
@@ -151,8 +183,8 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询省份信息列表 */
 function getList() {
   loading.value = true;
-  listProvince(queryParams.value).then(response => {
-    ProvinceList.value = response.rows;
+  listProvince2(queryParams.value).then(response => {
+    Province2List.value = response.rows;
     total.value = response.total;
     loading.value = false;
   });
@@ -173,7 +205,8 @@ function reset() {
     provinceId: null,
     provinceName: null
   };
-  proxy.resetForm("ProvinceRef");
+  iniCityList.value = [];
+  proxy.resetForm("Province2Ref");
 }
 
 /** 搜索按钮操作 */
@@ -213,8 +246,9 @@ function handleAdd() {
 function handleUpdate(row) {
   reset();
   const _pkId = row.pkId || ids.value
-  getProvince(_pkId).then(response => {
+  getProvince2(_pkId).then(response => {
     form.value = response.data;
+    iniCityList.value = response.data.iniCityList;
     open.value = true;
     title.value = "修改省份信息";
   });
@@ -222,16 +256,17 @@ function handleUpdate(row) {
 
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs["ProvinceRef"].validate(valid => {
+  proxy.$refs["Province2Ref"].validate(valid => {
     if (valid) {
+      form.value.iniCityList = iniCityList.value;
       if (form.value.pkId != null) {
-        updateProvince(form.value).then(response => {
+        updateProvince2(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
           getList();
         });
       } else {
-        addProvince(form.value).then(response => {
+        addProvince2(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
           getList();
@@ -245,18 +280,50 @@ function submitForm() {
 function handleDelete(row) {
   const _pkIds = row.pkId || ids.value;
   proxy.$modal.confirm('是否确认删除省份信息编号为"' + _pkIds + '"的数据项？').then(function() {
-    return delProvince(_pkIds);
+    return delProvince2(_pkIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
   }).catch(() => {});
 }
 
+/** 城市信息序号 */
+function rowIniCityIndex({ row, rowIndex }) {
+  row.index = rowIndex + 1;
+}
+
+/** 城市信息添加按钮操作 */
+function handleAddIniCity() {
+  let obj = {};
+  obj.seqNo = "";
+  obj.cityId = "";
+  obj.cityName = "";
+  iniCityList.value.push(obj);
+}
+
+/** 城市信息删除按钮操作 */
+function handleDeleteIniCity() {
+  if (checkedIniCity.value.length == 0) {
+    proxy.$modal.msgError("请先选择要删除的城市信息数据");
+  } else {
+    const iniCitys = iniCityList.value;
+    const checkedIniCitys = checkedIniCity.value;
+    iniCityList.value = iniCitys.filter(function(item) {
+      return checkedIniCitys.indexOf(item.index) == -1
+    });
+  }
+}
+
+/** 复选框选中数据 */
+function handleIniCitySelectionChange(selection) {
+  checkedIniCity.value = selection.map(item => item.index)
+}
+
 /** 导出按钮操作 */
 function handleExport() {
-  proxy.download('obd/Province/export', {
+  proxy.download('obd/Province2/export', {
     ...queryParams.value
-  }, `Province_${new Date().getTime()}.xlsx`)
+  }, `Province2_${new Date().getTime()}.xlsx`)
 }
 
 getList();
