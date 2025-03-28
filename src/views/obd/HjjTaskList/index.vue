@@ -33,10 +33,10 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="Status">
-        <el-select v-model="queryParams.Status" placeholder="请选择状态" clearable style="width: 200px">
+      <el-form-item label="排程状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择排程状态" clearable style="width: 200px">
           <el-option
-            v-for="dict in sys_job_status"
+            v-for="dict in task_schedule_status"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -336,9 +336,9 @@
       <el-table-column label="日期" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="taskDate" />
       <el-table-column label="断面/站点编码" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="sectionCode" />
       <el-table-column label="断面/站点名称" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="sectionName" />
-      <el-table-column label="状态" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="Status">
+      <el-table-column label="排程状态" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="status">
         <template #default="scope">
-          <dict-tag :options="sys_job_status" :value="scope.row.Status"/>
+          <dict-tag :options="task_schedule_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="运维公司" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="companyCode" />
@@ -457,10 +457,10 @@
         <el-form-item label="断面/站点名称" prop="sectionName">
           <el-input v-model="form.sectionName" placeholder="请输入断面/站点名称" />
         </el-form-item>
-        <el-form-item label="状态" prop="Status">
-          <el-radio-group v-model="form.Status">
+        <el-form-item label="排程状态" prop="status">
+          <el-radio-group v-model="form.status">
             <el-radio
-              v-for="dict in sys_job_status"
+              v-for="dict in task_schedule_status"
               :key="dict.value"
               :label="dict.value"
             >{{dict.label}}</el-radio>
@@ -612,7 +612,7 @@
 import { listHjjTaskList, getHjjTaskList, delHjjTaskList, addHjjTaskList, updateHjjTaskList } from "@/api/obd/HjjTaskList";
 
 const { proxy } = getCurrentInstance();
-const { sys_job_status } = proxy.useDict('sys_job_status');
+const { task_schedule_status } = proxy.useDict('task_schedule_status');
 
 const HjjTaskListList = ref([]);
 const open = ref(false);
@@ -633,7 +633,7 @@ const data = reactive({
     taskDate: null,
     sectionCode: null,
     sectionName: null,
-    Status: null,
+    status: null,
     companyCode: null,
     teamLeader: null,
     teamMembers: null,
@@ -698,7 +698,7 @@ function reset() {
     taskDate: null,
     sectionCode: null,
     sectionName: null,
-    Status: null,
+    status: null,
     taskContent: null,
     companyCode: null,
     teamLeader: null,
