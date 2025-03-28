@@ -17,15 +17,7 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="断面/站点编码" prop="sectionCode">
-        <el-input
-          v-model="queryParams.sectionCode"
-          placeholder="请输入断面/站点编码"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="断面/站点名称" prop="sectionName">
+      <el-form-item label="断面/站点" prop="sectionName">
         <el-input
           v-model="queryParams.sectionName"
           placeholder="请输入断面/站点名称"
@@ -43,14 +35,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="运维公司" prop="companyCode">
-        <el-input
-          v-model="queryParams.companyCode"
-          placeholder="请输入运维公司"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="组长" prop="teamLeader">
         <el-input
           v-model="queryParams.teamLeader"
@@ -59,71 +43,7 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="采样车辆牌照" prop="vehicleLicence">
-        <el-input
-          v-model="queryParams.vehicleLicence"
-          placeholder="请输入采样车辆牌照"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="出发地点" prop="cfPlace">
-        <el-input
-          v-model="queryParams.cfPlace"
-          placeholder="请输入出发地点"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="出发时间" prop="cfTime">
-        <el-date-picker clearable style="width: 200px"
-          v-model="queryParams.cfTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择出发时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="到达距离" prop="arrivalDistance">
-        <el-input
-          v-model="queryParams.arrivalDistance"
-          placeholder="请输入到达距离"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="计划路途时长" prop="plannedTravelDuration">
-        <el-input
-          v-model="queryParams.plannedTravelDuration"
-          placeholder="请输入计划路途时长"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="预计完成作业时间" prop="plannedEndTime">
-        <el-date-picker clearable style="width: 200px"
-          v-model="queryParams.plannedEndTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择预计完成作业时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="送样交接地点" prop="syPlace">
-        <el-input
-          v-model="queryParams.syPlace"
-          placeholder="请输入送样交接地点"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="预计送样交接时间" prop="plannedSyTime">
-        <el-date-picker clearable style="width: 200px"
-          v-model="queryParams.plannedSyTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择预计送样交接时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="排程时间" prop="apsTime">
+     <el-form-item label="排程时间" prop="apsTime">
         <el-date-picker clearable style="width: 200px"
           v-model="queryParams.apsTime"
           type="date"
@@ -139,14 +59,6 @@
           placeholder="请选择确认时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="确认人员" prop="confirmUser">
-        <el-input
-          v-model="queryParams.confirmUser"
-          placeholder="请输入确认人员"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="审核时间" prop="auditTime">
         <el-date-picker clearable style="width: 200px"
           v-model="queryParams.auditTime"
@@ -155,14 +67,7 @@
           placeholder="请选择审核时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="审核人员" prop="auditUser">
-        <el-input
-          v-model="queryParams.auditUser"
-          placeholder="请输入审核人员"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="下达时间" prop="releaseTime">
         <el-date-picker clearable style="width: 200px"
           v-model="queryParams.releaseTime"
@@ -170,22 +75,6 @@
           value-format="YYYY-MM-DD"
           placeholder="请选择下达时间">
         </el-date-picker>
-      </el-form-item>
-      <el-form-item label="下达人员" prop="releaseUser">
-        <el-input
-          v-model="queryParams.releaseUser"
-          placeholder="请输入下达人员"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="送样测站" prop="testStation">
-        <el-input
-          v-model="queryParams.testStation"
-          placeholder="请输入送样测站"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
       </el-form-item>
       <el-form-item label="采样打卡时间" prop="clockIn">
         <el-date-picker clearable style="width: 200px"
@@ -195,14 +84,6 @@
           placeholder="请选择采样打卡时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="采样工单编号" prop="cyTaskNo">
-        <el-input
-          v-model="queryParams.cyTaskNo"
-          placeholder="请输入采样工单编号"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="样品封箱时间" prop="ypfxTime">
         <el-date-picker clearable style="width: 200px"
           v-model="queryParams.ypfxTime"
@@ -211,7 +92,7 @@
           placeholder="请选择样品封箱时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="实际送样交接时间" prop="actualSyTime">
+      <el-form-item label="送样交接时间" prop="actualSyTime">
         <el-date-picker clearable style="width: 200px"
           v-model="queryParams.actualSyTime"
           type="date"
@@ -219,31 +100,7 @@
           placeholder="请选择实际送样交接时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="运输车辆牌照" prop="transportLicence">
-        <el-input
-          v-model="queryParams.transportLicence"
-          placeholder="请输入运输车辆牌照"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="运输工单编号" prop="transportTaskNo">
-        <el-input
-          v-model="queryParams.transportTaskNo"
-          placeholder="请输入运输工单编号"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="预计到达测站时间" prop="plannedTestStationTime">
-        <el-date-picker clearable style="width: 200px"
-          v-model="queryParams.plannedTestStationTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择预计到达测站时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="实际到达测站时间" prop="actualTestStationTime">
+      <el-form-item label="到达测站时间" prop="actualTestStationTime">
         <el-date-picker clearable style="width: 200px"
           v-model="queryParams.actualTestStationTime"
           type="date"
@@ -251,29 +108,13 @@
           placeholder="请选择实际到达测站时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="样品测试结束时间" prop="testResultTime">
+      <el-form-item label="测试结束时间" prop="testResultTime">
         <el-date-picker clearable style="width: 200px"
           v-model="queryParams.testResultTime"
           type="date"
           value-format="YYYY-MM-DD"
           placeholder="请选择样品测试结束时间">
         </el-date-picker>
-      </el-form-item>
-      <el-form-item label="测站工单编号" prop="testTaskNo">
-        <el-input
-          v-model="queryParams.testTaskNo"
-          placeholder="请输入测站工单编号"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="工作流" prop="docId">
-        <el-input
-          v-model="queryParams.docId"
-          placeholder="请输入工作流"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
       </el-form-item>
       <hr/>
       <div style="width: 100%; text-align: right;"><el-form-item>
@@ -294,26 +135,6 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['obd:HjjTaskList:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['obd:HjjTaskList:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="warning"
           plain
           icon="Download"
@@ -325,113 +146,54 @@
     </el-row>
 
     <el-table v-loading="loading" :data="HjjTaskListList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
-      <el-table-column type="selection" width="55" align="center" fixed="left" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="left">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:HjjTaskList:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['obd:HjjTaskList:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:HjjTaskList:edit']">查看详情</el-button>
         </template>
       </el-table-column>
       <el-table-column label="任务编号" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="taskNo" />
       <el-table-column label="日期" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="taskDate" />
-      <el-table-column label="断面/站点编码" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="sectionCode" />
-      <el-table-column label="断面/站点名称" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="sectionName" />
       <el-table-column label="排程状态" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="status">
         <template #default="scope">
           <dict-tag :options="task_schedule_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="运维公司" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="companyCode" />
-      <el-table-column label="组长" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="teamLeader" />
-      <el-table-column label="组员" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="teamMembers" />
-      <el-table-column label="采样车辆牌照" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="vehicleLicence" />
-      <el-table-column label="出发地点" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="cfPlace" />
-      <el-table-column label="出发时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="cfTime" width="180">
+      <el-table-column label="采样状态" align="center">       
         <template #default="scope">
-          <span>{{ parseTime(scope.row.cfTime, '{y}-{m}-{d}') }}</span>
+          <div v-if="scope.row.clockIn">
+            <div v-if="scope.row.ypfxTime" class="bg-green">采样</div>
+            <div v-else class="bg-blue">采样</div>
+          </div>
+          <div v-else class="bg-gray">采样</div>
         </template>
       </el-table-column>
-      <el-table-column label="到达距离" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="arrivalDistance" />
-      <el-table-column label="计划路途时长" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="plannedTravelDuration" />
-      <el-table-column label="计划作业时长" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="plannedWorkDuration" />
-      <el-table-column label="预计开始作业时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="plannedStartTime" width="180">
+      <el-table-column label="交接状态" align="center">       
         <template #default="scope">
-          <span>{{ parseTime(scope.row.plannedStartTime, '{y}-{m}-{d}') }}</span>
+          <div v-if="scope.row.ypfxTime">
+            <div v-if="scope.row.actualSyTime" class="bg-green">交接</div>
+            <div v-else class="bg-blue">交接</div>
+          </div>
+          <div v-else class="bg-gray">交接</div>
         </template>
       </el-table-column>
-      <el-table-column label="预计完成作业时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="plannedEndTime" width="180">
+      <el-table-column label="运输状态" align="center">       
         <template #default="scope">
-          <span>{{ parseTime(scope.row.plannedEndTime, '{y}-{m}-{d}') }}</span>
+          <div v-if="scope.row.actualSyTime">
+            <div v-if="scope.row.actualTestStationTime" class="bg-green">运输</div>
+            <div v-else class="bg-blue">运输</div>
+          </div>
+          <div v-else class="bg-gray">运输</div>
         </template>
       </el-table-column>
-      <el-table-column label="送样交接地点" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="syPlace" />
-      <el-table-column label="预计送样交接时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="plannedSyTime" width="180">
+      <el-table-column label="检测状态" align="center">       
         <template #default="scope">
-          <span>{{ parseTime(scope.row.plannedSyTime, '{y}-{m}-{d}') }}</span>
+          <div v-if="scope.row.actualTestStationTime">
+            <div v-if="scope.row.testResultTime" class="bg-green">检测</div>
+            <div v-else class="bg-blue">检测</div>
+          </div>
+          <div v-else class="bg-gray">检测</div>
         </template>
       </el-table-column>
-      <el-table-column label="排程时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="apsTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.apsTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="确认时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="confirmTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.confirmTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="确认人员" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="confirmUser" />
-      <el-table-column label="审核时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="auditTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.auditTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="审核人员" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="auditUser" />
-      <el-table-column label="下达时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="releaseTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.releaseTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="下达人员" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="releaseUser" />
-      <el-table-column label="送样测站" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="testStation" />
-      <el-table-column label="采样打卡时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="clockIn" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.clockIn, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="采样工单编号" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="cyTaskNo" />
-      <el-table-column label="样品封箱时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="ypfxTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.ypfxTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="实际送样交接时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="actualSyTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.actualSyTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="运输人员" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="transportUser" />
-      <el-table-column label="运输车辆牌照" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="transportLicence" />
-      <el-table-column label="运输工单编号" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="transportTaskNo" />
-      <el-table-column label="预计到达测站时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="plannedTestStationTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.plannedTestStationTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="实际到达测站时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="actualTestStationTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.actualTestStationTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="样品测试结束时间" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="testResultTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.testResultTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="测站工单编号" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="testTaskNo" />
-      <el-table-column label="测样结果" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="testResult" />
-      <el-table-column label="任务状态" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="cyTaskStatus" />
-      <el-table-column label="工作流" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="docId" />
     </el-table>
     
     <pagination
@@ -443,7 +205,17 @@
     />
 
     <!-- 添加或修改水样采样跟踪对话框 -->
-    <el-dialog :title="title" v-model="open" width="500px" append-to-body>
+    <el-dialog :title="title" v-model="open" width="65%" append-to-body>
+      <div style="display: flex; justify-content: space-between; width: 100%; height: 300px; background-color: #f0f0f0;">
+        
+      </div>
+      <hr/>
+      <template #header>
+        <div class="dialog-header">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
       <el-form ref="HjjTaskListRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="任务编号" prop="taskNo">
           <el-input v-model="form.taskNo" placeholder="请输入任务编号" />
