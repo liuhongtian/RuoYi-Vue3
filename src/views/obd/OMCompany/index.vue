@@ -80,10 +80,14 @@
 
     <el-table v-loading="loading" :data="OMCompanyList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" fixed="left" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="left">
+      <el-table-column label="操作" align="center" class-name="small-padding" width="500px" fixed="left">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:OMCompany:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['obd:OMCompany:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleStaff(scope.row)" v-hasPermi="['obd:OMCompany:edit']">人员</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleTeam(scope.row)" v-hasPermi="['obd:OMCompany:edit']">小组</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleOffice(scope.row)" v-hasPermi="['obd:OMCompany:edit']">办事处</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleLab(scope.row)" v-hasPermi="['obd:OMCompany:edit']">实验室</el-button>
         </template>
       </el-table-column>
       <el-table-column label="公司编码" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="companyId" />
@@ -301,6 +305,42 @@ function handleUpdate(row) {
     open.value = true;
     title.value = "修改运维公司";
   });
+}
+
+function handleStaff(row) {
+  proxy.$router.push({
+    path: '/basicinfo/OMStaff',
+    query: {
+      company: row.companyId
+    }
+  })
+}
+
+function handleTeam(row) {
+  proxy.$router.push({
+    path: '/basicinfo/OmOperaTeam',
+    query: {
+      company: row.companyId
+    }
+  })
+}
+
+function handleOffice(row) {
+  proxy.$router.push({
+    path: '/basicinfo/OmOffice',
+    query: {
+      company: row.companyId
+    }
+  })
+}
+
+function handleLab(row) {
+  proxy.$router.push({
+    path: '/basicinfo/OmLab',
+    query: {  
+      company: row.companyId
+    }
+  })
 }
 
 /** 提交按钮 */

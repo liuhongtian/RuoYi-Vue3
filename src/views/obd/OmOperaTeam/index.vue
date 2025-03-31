@@ -18,12 +18,14 @@
         />
       </el-form-item>
       <el-form-item label="运维公司" prop="companyCode">
-        <el-input
-          v-model="queryParams.companyCode"
-          placeholder="请输入运维公司"
-          clearable style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.companyCode" placeholder="请选择运维公司" clearable style="width: 200px">
+          <el-option
+            v-for="dict in OM_CompanyTCIDCompany_NameTCIDcompany_idTCIDPK_ID"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="所属包件" prop="managePackage">
         <el-input
@@ -110,7 +112,11 @@
       </el-table-column>
       <el-table-column label="小组编码" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="groupCode" />
       <el-table-column label="办事处" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="officeCode" />
-      <el-table-column label="运维公司" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="companyCode" />
+      <el-table-column label="运维公司" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="companyCode">
+        <template #default="scope">
+          <dict-tag :options="OM_CompanyTCIDCompany_NameTCIDcompany_idTCIDPK_ID" :value="scope.row.companyCode"/>
+        </template>
+      </el-table-column>
       <el-table-column label="可前往区域" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="manageArea" />
       <el-table-column label="所属包件" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="managePackage" />
       <el-table-column label="组长" align="center" :sort-orders="['descending', 'ascending']" sortable="custom" prop="teamLeader" />
@@ -140,7 +146,14 @@
           <el-input v-model="form.officeCode" placeholder="请输入办事处" />
         </el-form-item>
         <el-form-item label="运维公司" prop="companyCode">
-          <el-input v-model="form.companyCode" placeholder="请输入运维公司" />
+          <el-select v-model="form.companyCode" placeholder="请选择运维公司">
+            <el-option
+              v-for="dict in OM_CompanyTCIDCompany_NameTCIDcompany_idTCIDPK_ID"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="可前往区域" prop="manageArea">
           <el-input v-model="form.manageArea" type="textarea" placeholder="请输入内容" />
@@ -178,8 +191,11 @@
 <script setup name="OmOperaTeam">
 import { listOmOperaTeam, getOmOperaTeam, delOmOperaTeam, addOmOperaTeam, updateOmOperaTeam } from "@/api/obd/OmOperaTeam";
 
+import { useRoute } from 'vue-router';
+const { query, params } = useRoute();
+
 const { proxy } = getCurrentInstance();
-const { om_team_type } = proxy.useDict('om_team_type');
+const { om_team_type, OM_CompanyTCIDCompany_NameTCIDcompany_idTCIDPK_ID } = proxy.useDict('om_team_type', 'OM_CompanyTCIDCompany_NameTCIDcompany_idTCIDPK_ID');
 
 const OmOperaTeamList = ref([]);
 const open = ref(false);
@@ -198,7 +214,7 @@ const data = reactive({
     pageSize: 10,
     groupCode: null,
     officeCode: null,
-    companyCode: null,
+    companyCode: query.company,
     manageArea: null,
     managePackage: null,
     teamLeader: null,
