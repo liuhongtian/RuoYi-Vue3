@@ -53,6 +53,11 @@ export default defineConfig(({ mode, command }) => {
           }
         ]
       }
+    },
+    build: {
+      rollupOptions: {
+        external: []
+      }
     }
   }
 })

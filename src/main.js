@@ -43,9 +43,20 @@ import ImagePreview from "@/components/ImagePreview"
 // 字典标签组件
 import DictTag from '@/components/DictTag'
 
+// vform 表单设计器
+//import vform from '@/components/vform/VFormDesigner.umd.min.js'
+//import '@/components/vform/VFormDesigner.css'
+
+import VForm3 from 'vform3-builds'  //引入VForm 3库
+import 'vform3-builds/dist/designer.style.css'  //引入VForm3样式
+
+import modelerStore from '@/components/Process/common/global'
+
+
 const app = createApp(App)
 
 // 全局方法挂载
+app.config.modelerStore = modelerStore
 app.config.globalProperties.useDict = useDict
 app.config.globalProperties.download = download
 app.config.globalProperties.parseTime = parseTime
@@ -63,6 +74,10 @@ app.component('ImageUpload', ImageUpload)
 app.component('ImagePreview', ImagePreview)
 app.component('RightToolbar', RightToolbar)
 app.component('Editor', Editor)
+
+//同时注册了v-form-designer、v-form-render等组件
+//window.$vueApp.use(vform)
+app.use(VForm3)
 
 app.use(router)
 app.use(store)

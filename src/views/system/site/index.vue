@@ -79,7 +79,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="openDialog">自定义表单样例</el-button>
+        <el-button type="primary" icon="el-icon-search" size="small" @click="openDialog">自定义表单样例</el-button>
       </el-form-item>
       <hr/>
       <div style="width: 100%; text-align: right;"><el-form-item>
