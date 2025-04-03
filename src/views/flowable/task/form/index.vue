@@ -9,7 +9,7 @@
     >
       <el-form-item label="表单名称" prop="formName">
         <el-input
-          v-model:value="queryParams.formName"
+          v-model="queryParams.formName"
           placeholder="请输入表单名称"
           clearable
           size="small"
