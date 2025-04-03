@@ -151,22 +151,22 @@
     <!-- 添加或修改流程达式对话框 -->
     <el-dialog
       :title="title"
-      v-model:visible="open"
+      v-model="open"
       width="500px"
       append-to-body
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称" prop="name">
-          <el-input v-model:value="form.name" placeholder="请输入表达式名称" />
+          <el-input v-model="form.name" placeholder="请输入表达式名称" />
         </el-form-item>
         <el-form-item label="内容" prop="expression">
           <el-input
-            v-model:value="form.expression"
+            v-model="form.expression"
             placeholder="请输入表达式内容"
           />
         </el-form-item>
         <el-form-item label="指定类型" prop="dataType">
-          <el-radio-group v-model:value="form.dataType">
+          <el-radio-group v-model="form.dataType">
             <el-radio
               v-for="dict in dict.type.exp_data_type"
               :key="dict.value"
@@ -176,7 +176,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-radio-group v-model:value="form.status">
+          <el-radio-group v-model="form.status">
             <el-radio
               v-for="dict in dict.type.sys_common_status"
               :key="dict.value"
@@ -186,7 +186,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model:value="form.remark" placeholder="请输入备注" />
+          <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <template v-slot:footer>
