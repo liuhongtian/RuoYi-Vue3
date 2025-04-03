@@ -10,7 +10,7 @@
     >
       <el-form-item label="名称" prop="name">
         <el-input
-          v-model:value="queryParams.name"
+          v-model="queryParams.name"
           placeholder="请输入名称"
           clearable
           @keyup.enter="handleQuery"
@@ -18,7 +18,7 @@
       </el-form-item>
       <el-form-item label="监听类型" prop="type">
         <el-select
-          v-model:value="queryParams.type"
+          v-model="queryParams.type"
           placeholder="请选择监听类型"
           clearable
         >
