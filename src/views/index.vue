@@ -74,7 +74,6 @@ const loadSiteMarkers = async () => {
       sites.value = res.rows
       // 添加站点标记
       sites.value.filter(site => site.longitude && site.latitude).forEach(site => {
-        console.log(site)
         // 创建标记点
         const marker = site.status === '1' ? new BMap.Marker(new BMap.Point(site.longitude, site.latitude), {
           title: site.stationName, icon: new BMap.Icon(iconUrlGreen, new BMap.Size(23, 25), {
@@ -86,8 +85,6 @@ const loadSiteMarkers = async () => {
           })
         })
         map.addOverlay(marker)
-
-        console.log("pointer added: ", site.longitude, site.latitude)
 
         // 创建信息窗口
         const infoWindow = new BMap.InfoWindow(`

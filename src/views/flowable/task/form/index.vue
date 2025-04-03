@@ -109,39 +109,11 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改流程表单对话框 -->
-    <el-dialog
-      :title="title"
-      v-model:visible="open"
-      width="500px"
-      append-to-body
-    >
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="表单名称" prop="formName">
-          <el-input
-            v-model:value="form.formName"
-            placeholder="请输入表单名称"
-          />
-        </el-form-item>
-        <el-form-item label="表单内容">
-          <editor v-model:value="form.formContent" :min-height="192" />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model:value="form.remark" placeholder="请输入备注" />
-        </el-form-item>
-      </el-form>
-      <template v-slot:footer>
-        <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
-        </div>
-      </template>
-    </el-dialog>
 
     <!--表单详情-->
     <el-dialog
       :title="formTitle"
-      v-model:visible="formRenderOpen"
+      v-model="formRenderOpen"
       width="60%"
       append-to-body
     >

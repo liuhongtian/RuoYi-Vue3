@@ -43,12 +43,8 @@ import ImagePreview from "@/components/ImagePreview"
 // 字典标签组件
 import DictTag from '@/components/DictTag'
 
-// vform 表单设计器
-//import vform from '@/components/vform/VFormDesigner.umd.min.js'
-//import '@/components/vform/VFormDesigner.css'
-
-import VForm3 from 'vform3-builds'  //引入VForm 3库
 import 'vform3-builds/dist/designer.style.css'  //引入VForm3样式
+import VForm3 from 'vform3-builds'  //引入VForm 3库
 
 import modelerStore from '@/components/Process/common/global'
 
@@ -76,7 +72,6 @@ app.component('RightToolbar', RightToolbar)
 app.component('Editor', Editor)
 
 //同时注册了v-form-designer、v-form-render等组件
-//window.$vueApp.use(vform)
 app.use(VForm3)
 
 app.use(router)
