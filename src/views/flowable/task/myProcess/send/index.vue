@@ -15,7 +15,7 @@
       </template>
       <el-tabs
         tab-position="top"
-        v-model:value="activeName"
+        v-model="activeName"
         @tab-click="handleClick"
       >
         <!--表单信息-->
@@ -37,7 +37,7 @@
       <!--选择流程接收人-->
       <el-dialog
         :title="taskTitle"
-        v-model:visible="taskOpen"
+        v-model="taskOpen"
         width="65%"
         append-to-body
       >

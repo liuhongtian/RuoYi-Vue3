@@ -15,7 +15,7 @@
       </template>
       <el-tabs
         tab-position="top"
-        v-model:value="activeName"
+        v-model="activeName"
         @tab-click="handleClick"
       >
         <!--表单信息-->

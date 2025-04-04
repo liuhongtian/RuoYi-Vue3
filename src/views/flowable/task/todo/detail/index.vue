@@ -17,7 +17,7 @@
       </template>
       <el-tabs
         tab-position="top"
-        v-model:value="activeName"
+        v-model="activeName"
         @tab-click="handleClick"
       >
         <!--表单信息-->
@@ -121,7 +121,7 @@
       <!--审批任务-->
       <el-dialog
         :title="completeTitle"
-        v-model:visible="completeOpen"
+        v-model="completeOpen"
         width="60%"
         append-to-body
       >
@@ -147,7 +147,7 @@
           >
             <el-input
               type="textarea"
-              v-model:value="taskForm.comment"
+              v-model="taskForm.comment"
               placeholder="请输入处理意见"
             />
           </el-form-item>
@@ -162,13 +162,13 @@
       <!--退回流程-->
       <el-dialog
         :title="returnTitle"
-        v-model:visible="returnOpen"
+        v-model="returnOpen"
         width="40%"
         append-to-body
       >
         <el-form ref="taskForm" :model="taskForm" label-width="80px">
           <el-form-item label="退回节点" prop="targetKey">
-            <el-radio-group v-model:value="taskForm.targetKey">
+            <el-radio-group v-model="taskForm.targetKey">
               <el-radio-button
                 v-for="item in returnTaskList"
                 :key="item.id"
@@ -187,7 +187,7 @@
             <el-input
               style="width: 50%"
               type="textarea"
-              v-model:value="taskForm.comment"
+              v-model="taskForm.comment"
               placeholder="请输入意见"
             />
           </el-form-item>
@@ -202,7 +202,7 @@
       <!--驳回流程-->
       <el-dialog
         :title="rejectTitle"
-        v-model:visible="rejectOpen"
+        v-model="rejectOpen"
         width="40%"
         append-to-body
       >
@@ -217,7 +217,7 @@
             <el-input
               style="width: 50%"
               type="textarea"
-              v-model:value="taskForm.comment"
+              v-model="taskForm.comment"
               placeholder="请输入意见"
             />
           </el-form-item>

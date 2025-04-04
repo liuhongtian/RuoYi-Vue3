@@ -9,7 +9,7 @@
     >
       <el-form-item label="名称" prop="name">
         <el-input
-          v-model:value="queryParams.name"
+          v-model="queryParams.name"
           placeholder="请输入名称"
           clearable
           size="small"
@@ -20,7 +20,7 @@
         <el-date-picker
           clearable
           size="small"
-          v-model:value="queryParams.deployTime"
+          v-model="queryParams.deployTime"
           type="date"
           value-format="yyyy-MM-dd"
           placeholder="选择时间"
