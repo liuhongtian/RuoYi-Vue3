@@ -159,7 +159,7 @@
     <!-- 添加或修改流程监听对话框 -->
     <el-dialog
       :title="title"
-      v-model:visible="open"
+      v-model="open"
       width="500px"
       append-to-body
     >

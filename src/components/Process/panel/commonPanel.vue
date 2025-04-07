@@ -11,14 +11,14 @@
         prop="id"
         @change="updateElementTask('id')"
       >
-        <el-input v-model:value="bpmnFormData.id" />
+        <el-input v-model="bpmnFormData.id" />
       </el-form-item>
       <el-form-item
         :label="bpmnFormData.$type === 'bpmn:Process' ? '流程名称' : '节点名称'"
         prop="name"
       >
         <el-input
-          v-model:value="bpmnFormData.name"
+          v-model="bpmnFormData.name"
           @change="updateElementTask('name')"
         />
       </el-form-item>
@@ -26,7 +26,7 @@
       <template v-if="bpmnFormData.$type === 'bpmn:Process'">
         <el-form-item label="流程分类" prop="processCategory">
           <el-select
-            v-model:value="bpmnFormData.processCategory"
+            v-model="bpmnFormData.processCategory"
             placeholder="请选择流程分类"
             @change="updateElementTask('processCategory')"
           >
@@ -44,7 +44,7 @@
         label="状态"
       >
         <el-switch
-          v-model:value="bpmnFormData.isExpanded"
+          v-model="bpmnFormData.isExpanded"
           active-text="展开"
           inactive-text="折叠"
           @change="updateElementTask('isExpanded')"
@@ -59,7 +59,7 @@
 
 <script>
 import { StrUtil } from '@/utils/StrUtil'
-
+import modelerStore from '@/components/Process/common/global'
 export default {
   name: 'CommonPanel',
   dicts: ['sys_process_category'],
@@ -101,14 +101,14 @@ export default {
   methods: {
     resetTaskForm() {
       this.bpmnFormData = JSON.parse(
-        JSON.stringify(this.modelerStore.element.businessObject)
+        JSON.stringify(modelerStore.element.businessObject)
       )
     },
     updateElementTask(key) {
       const taskAttr = Object.create(null)
       taskAttr[key] = this.bpmnFormData[key] || null
-      this.modelerStore.modeling.updateProperties(
-        this.modelerStore.element,
+      modelerStore.modeling.updateProperties(
+        modelerStore.element,
         taskAttr
       )
     },

@@ -8,7 +8,7 @@
       </el-form-item>
       <el-form-item label="回路特性">
         <el-select
-          v-model:value="loopCharacteristics"
+          v-model="loopCharacteristics"
           @change="changeLoopCharacteristicsType"
         >
           <!--bpmn:MultiInstanceLoopCharacteristics-->
@@ -27,45 +27,45 @@
       >
         <el-form-item label="循环基数" key="loopCardinality">
           <el-input
-            v-model:value="loopInstanceForm.loopCardinality"
+            v-model="loopInstanceForm.loopCardinality"
             clearable
             @change="updateLoopCardinality"
           />
         </el-form-item>
         <el-form-item label="集合" key="collection">
           <el-input
-            v-model:value="loopInstanceForm.collection"
+            v-model="loopInstanceForm.collection"
             clearable
             @change="updateLoopBase"
           />
         </el-form-item>
         <el-form-item label="元素变量" key="elementVariable">
           <el-input
-            v-model:value="loopInstanceForm.elementVariable"
+            v-model="loopInstanceForm.elementVariable"
             clearable
             @change="updateLoopBase"
           />
         </el-form-item>
         <el-form-item label="完成条件" key="completionCondition">
           <el-input
-            v-model:value="loopInstanceForm.completionCondition"
+            v-model="loopInstanceForm.completionCondition"
             clearable
             @change="updateLoopCondition"
           />
         </el-form-item>
         <el-form-item label="异步状态" key="async">
           <el-checkbox
-            v-model:value="loopInstanceForm.asyncBefore"
+            v-model="loopInstanceForm.asyncBefore"
             label="异步前"
             @change="updateLoopAsync('asyncBefore')"
           />
           <el-checkbox
-            v-model:value="loopInstanceForm.asyncAfter"
+            v-model="loopInstanceForm.asyncAfter"
             label="异步后"
             @change="updateLoopAsync('asyncAfter')"
           />
           <el-checkbox
-            v-model:value="loopInstanceForm.exclusive"
+            v-model="loopInstanceForm.exclusive"
             v-if="loopInstanceForm.asyncAfter || loopInstanceForm.asyncBefore"
             label="排除"
             @change="updateLoopAsync('exclusive')"
@@ -77,7 +77,7 @@
           v-if="loopInstanceForm.asyncAfter || loopInstanceForm.asyncBefore"
         >
           <el-input
-            v-model:value="loopInstanceForm.timeCycle"
+            v-model="loopInstanceForm.timeCycle"
             clearable
             @change="updateLoopTimeCycle"
           />
@@ -88,7 +88,7 @@
     <!-- 参数说明 -->
     <el-dialog
       title="多实例参数"
-      v-model:visible="dialogVisible"
+      v-model="dialogVisible"
       width="680px"
       @closed="$emit('close')"
     >
@@ -130,7 +130,7 @@
 
 <script>
 import { StrUtil } from '@/utils/StrUtil'
-
+import modelerStore from '@/components/Process/common/global'
 export default {
   name: 'MultiInstance',
   /** 组件传值  */
@@ -163,7 +163,7 @@ export default {
 
       handler(newVal) {
         if (StrUtil.isNotBlank(newVal)) {
-          this.getElementLoop(this.modelerStore.element.businessObject)
+          this.getElementLoop(modelerStore.element.businessObject)
         }
       },
 
@@ -204,7 +204,7 @@ export default {
       }
       // 保留当前元素 businessObject 上的 loopCharacteristics 实例
       this.multiLoopInstance =
-        this.modelerStore.element.businessObject.loopCharacteristics
+        modelerStore.element.businessObject.loopCharacteristics
       // 更新表单
       if (
         businessObject.loopCharacteristics.extensionElements &&
@@ -221,17 +221,17 @@ export default {
       this.loopInstanceForm = { ...this.defaultLoopInstanceForm }
       // 取消多实例配置
       if (type === 'Null') {
-        this.modelerStore.modeling.updateProperties(this.modelerStore.element, {
+        modelerStore.modeling.updateProperties(modelerStore.element, {
           loopCharacteristics: null,
         })
         return
       }
       // 配置循环
       if (type === 'StandardLoop') {
-        const loopCharacteristicsObject = this.modelerStore.moddle.create(
+        const loopCharacteristicsObject = modelerStore.moddle.create(
           'bpmn:StandardLoopCharacteristics'
         )
-        this.modelerStore.modeling.updateProperties(this.modelerStore.element, {
+        modelerStore.modeling.updateProperties(modelerStore.element, {
           loopCharacteristics: loopCharacteristicsObject,
         })
         this.multiLoopInstance = null
@@ -239,18 +239,18 @@ export default {
       }
       // 时序
       if (type === 'SequentialMultiInstance') {
-        this.multiLoopInstance = this.modelerStore.moddle.create(
+        this.multiLoopInstance = modelerStore.moddle.create(
           'bpmn:MultiInstanceLoopCharacteristics',
           {
             isSequential: true,
           }
         )
       } else {
-        this.multiLoopInstance = this.modelerStore.moddle.create(
+        this.multiLoopInstance = modelerStore.moddle.create(
           'bpmn:MultiInstanceLoopCharacteristics'
         )
       }
-      this.modelerStore.modeling.updateProperties(this.modelerStore.element, {
+      modelerStore.modeling.updateProperties(modelerStore.element, {
         loopCharacteristics: this.multiLoopInstance,
       })
     },
@@ -259,13 +259,13 @@ export default {
     updateLoopCardinality(cardinality) {
       let loopCardinality = null
       if (cardinality && cardinality.length) {
-        loopCardinality = this.modelerStore.moddle.create(
+        loopCardinality = modelerStore.moddle.create(
           'bpmn:FormalExpression',
           { body: cardinality }
         )
       }
-      this.modelerStore.modeling.updateModdleProperties(
-        this.modelerStore.element,
+      modelerStore.modeling.updateModdleProperties(
+        modelerStore.element,
         this.multiLoopInstance,
         {
           loopCardinality,
@@ -277,13 +277,13 @@ export default {
     updateLoopCondition(condition) {
       let completionCondition = null
       if (condition && condition.length) {
-        completionCondition = this.modelerStore.moddle.create(
+        completionCondition = modelerStore.moddle.create(
           'bpmn:FormalExpression',
           { body: condition }
         )
       }
-      this.modelerStore.modeling.updateModdleProperties(
-        this.modelerStore.element,
+      modelerStore.modeling.updateModdleProperties(
+        modelerStore.element,
         this.multiLoopInstance,
         {
           completionCondition,
@@ -293,11 +293,11 @@ export default {
 
     // 重试周期
     updateLoopTimeCycle(timeCycle) {
-      const extensionElements = this.modelerStore.moddle.create(
+      const extensionElements = modelerStore.moddle.create(
         'bpmn:ExtensionElements',
         {
           values: [
-            this.modelerStore.moddle.create(
+            modelerStore.moddle.create(
               `flowable:FailedJobRetryTimeCycle`,
               {
                 body: timeCycle,
@@ -306,8 +306,8 @@ export default {
           ],
         }
       )
-      this.modelerStore.modeling.updateModdleProperties(
-        this.modelerStore.element,
+      modelerStore.modeling.updateModdleProperties(
+        modelerStore.element,
         this.multiLoopInstance,
         {
           extensionElements,
@@ -317,8 +317,8 @@ export default {
 
     // 直接更新的基础信息
     updateLoopBase() {
-      this.modelerStore.modeling.updateModdleProperties(
-        this.modelerStore.element,
+      modelerStore.modeling.updateModdleProperties(
+        modelerStore.element,
         this.multiLoopInstance,
         {
           collection: this.loopInstanceForm.collection || null,
@@ -342,8 +342,8 @@ export default {
       } else {
         asyncAttr[key] = this.loopInstanceForm[key]
       }
-      this.modelerStore.modeling.updateModdleProperties(
-        this.modelerStore.element,
+      modelerStore.modeling.updateModdleProperties(
+        modelerStore.element,
         this.multiLoopInstance,
         asyncAttr
       )

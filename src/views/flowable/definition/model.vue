@@ -12,12 +12,12 @@
       :title="xmlTitle"
       :modal="false"
       direction="rtl"
-      v-model:visible="xmlOpen"
+      v-model="xmlOpen"
       size="60%"
     >
       <!-- 设置对话框内容高度 -->
       <el-scrollbar>
-        <pre v-highlight="xmlData"><code class="xml"></code></pre>
+        <pre v-highlight="xmlData"><code class="xml">{{ xmlData }}</code></pre>
       </el-scrollbar>
     </el-drawer>
   </div>
@@ -34,7 +34,9 @@ import {
 import BpmnModel from '@/components/Process'
 import vkBeautify from 'vkbeautify'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/github-dark.css'
+import 'highlight.js/styles/atelier-savanna-dark.css'
+import modelerStore from '@/components/Process/common/global'
+
 export default {
   name: 'Model',
   components: {
@@ -116,13 +118,13 @@ export default {
     /** 指定流程办理人员列表 */
     getDataList() {
       userList().then((res) => {
-        this.modelerStore.userList = res.data
+        modelerStore.userList = res.data
       })
       roleList().then((res) => {
-        this.modelerStore.roleList = res.data
+        modelerStore.roleList = res.data
       })
       expList().then((res) => {
-        this.modelerStore.expList = res.data
+        modelerStore.expList = res.data
         this.dataExit = true
       })
     },

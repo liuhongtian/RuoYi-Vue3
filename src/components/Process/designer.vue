@@ -76,6 +76,7 @@ import { translateNodeName } from "./common/bpmnUtils";
 import FlowUser from "@/components/flow/User/index.vue";
 import FlowRole from "@/components/flow/Role/index.vue";
 import FlowExp from "@/components/flow/Expression/index.vue";
+import modelerStore from './common/global'
 export default {
   name: "Designer",
   components: {
@@ -133,14 +134,14 @@ export default {
     getActiveElement() {
       // 初始第一个选中元素 bpmn:Process
       this.initFormOnChanged(null);
-      this.modelerStore.modeler.on("import.done", e => {
+      modelerStore.modeler.on("import.done", e => {
         this.initFormOnChanged(null);
       });
       // 监听选择事件，修改当前激活的元素以及表单
-      this.modelerStore.modeler.on("selection.changed", ({newSelection}) => {
+      modelerStore.modeler.on("selection.changed", ({newSelection}) => {
         this.initFormOnChanged(newSelection[0] || null);
       });
-      this.modelerStore.modeler.on("element.changed", ({element}) => {
+      modelerStore.modeler.on("element.changed", ({element}) => {
         // 保证 修改 "默认流转路径" 类似需要修改多个元素的事件发生的时候，更新表单的元素与原选中元素不一致。
         if (element && element.id === this.elementId) {
           this.initFormOnChanged(element);
@@ -153,11 +154,11 @@ export default {
       let activatedElement = element;
       if (!activatedElement) {
         activatedElement =
-          this.modelerStore.elRegistry.find(el => el.type === "bpmn:Process") ??
-          this.modelerStore.elRegistry.find(el => el.type === "bpmn:Collaboration");
+          modelerStore.elRegistry.find(el => el.type === "bpmn:Process") ??
+          modelerStore.elRegistry.find(el => el.type === "bpmn:Collaboration");
       }
       if (!activatedElement) return;
-      this.modelerStore.element = activatedElement;
+      modelerStore.element = activatedElement;
       this.elementId = activatedElement.id;
       this.elementType = activatedElement.type.split(":")[1] || "";
       this.conditionVisible = !!(

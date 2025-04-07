@@ -46,7 +46,7 @@
 
     <!-- 监听器 编辑/创建 部分 -->
     <el-drawer
-      v-model:visible="listenerFormModelVisible"
+      v-model="listenerFormModelVisible"
       title="执行监听器"
       size="480px"
       append-to-body
@@ -64,7 +64,7 @@
           prop="event"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-select v-model:value="listenerForm.event">
+          <el-select v-model="listenerForm.event">
             <el-option label="start" value="start" />
             <el-option label="end" value="end" />
           </el-select>
@@ -74,7 +74,7 @@
           prop="listenerType"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-select v-model:value="listenerForm.listenerType">
+          <el-select v-model="listenerForm.listenerType">
             <el-option
               v-for="i in Object.keys(listenerTypeObject)"
               :key="i"
@@ -89,7 +89,7 @@
           prop="class"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-input v-model:value="listenerForm.class" clearable />
+          <el-input v-model="listenerForm.class" clearable />
         </el-form-item>
         <el-form-item
           v-if="listenerForm.listenerType === 'expressionListener'"
@@ -97,7 +97,7 @@
           prop="expression"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-input v-model:value="listenerForm.expression" clearable />
+          <el-input v-model="listenerForm.expression" clearable />
         </el-form-item>
         <el-form-item
           v-if="listenerForm.listenerType === 'delegateExpressionListener'"
@@ -105,7 +105,7 @@
           prop="delegateExpression"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-input v-model:value="listenerForm.delegateExpression" clearable />
+          <el-input v-model="listenerForm.delegateExpression" clearable />
         </el-form-item>
         <template v-if="listenerForm.listenerType === 'scriptListener'">
           <el-form-item
@@ -118,7 +118,7 @@
               message: '请填写脚本格式',
             }"
           >
-            <el-input v-model:value="listenerForm.scriptFormat" clearable />
+            <el-input v-model="listenerForm.scriptFormat" clearable />
           </el-form-item>
           <el-form-item
             label="脚本类型"
@@ -130,7 +130,7 @@
               message: '请选择脚本类型',
             }"
           >
-            <el-select v-model:value="listenerForm.scriptType">
+            <el-select v-model="listenerForm.scriptType">
               <el-option label="内联脚本" value="inlineScript" />
               <el-option label="外部脚本" value="externalScript" />
             </el-select>
@@ -145,7 +145,7 @@
               message: '请填写脚本内容',
             }"
           >
-            <el-input v-model:value="this.listenerForm" clearable />
+            <el-input v-model="this.listenerForm.value" clearable />
           </el-form-item>
           <el-form-item
             v-if="listenerForm.scriptType === 'externalScript'"
@@ -157,7 +157,7 @@
               message: '请填写资源地址',
             }"
           >
-            <el-input v-model:value="listenerForm.resource" clearable />
+            <el-input v-model="listenerForm.resource" clearable />
           </el-form-item>
         </template>
       </el-form>
@@ -227,7 +227,7 @@
     <!-- 注入西段 编辑/创建 部分 -->
     <el-dialog
       title="字段配置"
-      v-model:visible="listenerFieldFormModelVisible"
+      v-model="listenerFieldFormModelVisible"
       width="600px"
       append-to-body
       destroy-on-close
@@ -244,14 +244,14 @@
           prop="name"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-input v-model:value="listenerFieldForm.name" clearable />
+          <el-input v-model="listenerFieldForm.name" clearable />
         </el-form-item>
         <el-form-item
           label="字段类型："
           prop="fieldType"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-select v-model:value="listenerFieldForm.fieldType">
+          <el-select v-model="listenerFieldForm.fieldType">
             <el-option
               v-for="i in Object.keys(fieldTypeObject)"
               :key="i"
@@ -266,7 +266,7 @@
           prop="string"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-input v-model:value="listenerFieldForm.string" clearable />
+          <el-input v-model="listenerFieldForm.string" clearable />
         </el-form-item>
         <el-form-item
           v-if="listenerFieldForm.fieldType === 'expression'"
@@ -274,7 +274,7 @@
           prop="expression"
           :rules="{ required: true, trigger: ['blur', 'change'] }"
         >
-          <el-input v-model:value="listenerFieldForm.expression" clearable />
+          <el-input v-model="listenerFieldForm.expression" clearable />
         </el-form-item>
       </el-form>
       <template v-slot:footer>
@@ -291,7 +291,7 @@
 
     <!-- 内置监听器 -->
     <el-drawer
-      v-model:visible="listenerSystemVisible"
+      v-model="listenerSystemVisible"
       title="执行监听器"
       size="580px"
       append-to-body
@@ -355,7 +355,7 @@ import {
   createSystemListenerObject,
   updateElementExtensions,
 } from '../common/bpmnUtils'
-
+import modelerStore from '@/components/Process/common/global'
 import { StrUtil } from '@/utils/StrUtil'
 
 export default {
@@ -434,7 +434,7 @@ export default {
   methods: {
     resetListenersList() {
       this.bpmnElementListeners =
-        this.modelerStore.element.businessObject?.extensionElements?.values?.filter(
+        modelerStore.element.businessObject?.extensionElements?.values?.filter(
           (ex) => ex.$type === `flowable:ExecutionListener`
         ) ?? []
       this.elementListenersList = this.bpmnElementListeners.map((listener) =>
@@ -526,9 +526,9 @@ export default {
           this.bpmnElementListeners.splice(index, 1)
           this.elementListenersList.splice(index, 1)
           updateElementExtensions(
-            this.modelerStore.moddle,
-            this.modelerStore.modeling,
-            this.modelerStore.element,
+            modelerStore.moddle,
+            modelerStore.modeling,
+            modelerStore.element,
             this.otherExtensionList.concat(this.bpmnElementListeners)
           )
           $emit(
@@ -545,7 +545,7 @@ export default {
       let validateStatus = await this.$refs['listenerFormRef'].validate()
       if (!validateStatus) return // 验证不通过直接返回
       const listenerObject = createListenerObject(
-        this.modelerStore.moddle,
+        modelerStore.moddle,
         this.listenerForm,
         false,
         'flowable'
@@ -567,13 +567,13 @@ export default {
       }
       // 保存其他配置
       this.otherExtensionList =
-        this.modelerStore.element.businessObject?.extensionElements?.values?.filter(
+        modelerStore.element.businessObject?.extensionElements?.values?.filter(
           (ex) => ex.$type !== `flowable:ExecutionListener`
         ) ?? []
       updateElementExtensions(
-        this.modelerStore.moddle,
-        this.modelerStore.modeling,
-        this.modelerStore.element,
+        modelerStore.moddle,
+        modelerStore.modeling,
+        modelerStore.element,
         this.otherExtensionList.concat(this.bpmnElementListeners)
       )
       $emit(this, 'getExecutionListenerCount', this.elementListenersList.length)
@@ -651,7 +651,7 @@ export default {
         this.checkedListenerData.forEach((value) => {
           // 保存其他配置
           const listenerObject = createSystemListenerObject(
-            this.modelerStore.moddle,
+            modelerStore.moddle,
             value,
             false,
             'flowable'
@@ -659,13 +659,13 @@ export default {
           this.bpmnElementListeners.push(listenerObject)
           this.elementListenersList.push(changeListenerObject(value))
           this.otherExtensionList =
-            this.modelerStore.element.businessObject?.extensionElements?.values?.filter(
+            modelerStore.element.businessObject?.extensionElements?.values?.filter(
               (ex) => ex.$type !== `flowable:TaskListener`
             ) ?? []
           updateElementExtensions(
-            this.modelerStore.moddle,
-            this.modelerStore.modeling,
-            this.modelerStore.element,
+            modelerStore.moddle,
+            modelerStore.modeling,
+            modelerStore.element,
             this.otherExtensionList.concat(this.bpmnElementListeners)
           )
         })

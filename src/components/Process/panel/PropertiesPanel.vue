@@ -43,14 +43,14 @@
       <el-button
         size="small"
         type="primary"
-        icon="el-icon-plus"
+        icon="Plus"
         @click="openAttributesForm(null, -1)"
         >添加属性</el-button
       >
     </div>
 
     <el-dialog
-      v-model:visible="propertyFormModelVisible"
+      v-model="propertyFormModelVisible"
       title="属性配置"
       width="600px"
       append-to-body
@@ -64,10 +64,10 @@
         @submit.prevent
       >
         <el-form-item label="属性名：" prop="name">
-          <el-input v-model:value="propertyForm.name" clearable />
+          <el-input v-model="propertyForm.name" clearable />
         </el-form-item>
         <el-form-item label="属性值：" prop="value">
-          <el-input v-model:value="propertyForm.value" clearable />
+          <el-input v-model="propertyForm.value" clearable />
         </el-form-item>
       </el-form>
       <template v-slot:footer>
@@ -84,7 +84,7 @@
 
 <script>
 import { StrUtil } from '@/utils/StrUtil'
-
+import modelerStore from '@/components/Process/common/global'
 export default {
   name: 'PropertiesPanel',
   props: {
@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     resetAttributesList() {
-      this.bpmnElement = this.modelerStore.element
+      this.bpmnElement = modelerStore.element
       this.otherExtensionList = [] // 其他扩展配置
       this.bpmnElementProperties =
         this.bpmnElement.businessObject?.extensionElements?.values?.filter(
@@ -156,7 +156,7 @@ export default {
           this.elementPropertyList.splice(index, 1)
           this.bpmnElementPropertyList.splice(index, 1)
           // 新建一个属性字段的保存列表
-          const propertiesObject = this.modelerStore.moddle.create(
+          const propertiesObject = modelerStore.moddle.create(
             `flowable:Properties`,
             {
               values: this.bpmnElementPropertyList,
@@ -171,7 +171,7 @@ export default {
       const { name, value } = this.propertyForm
       console.log(this.bpmnElementPropertyList)
       if (this.editingPropertyIndex !== -1) {
-        this.modelerStore.modeling.updateModdleProperties(
+        modelerStore.modeling.updateModdleProperties(
           this.bpmnElement,
           this.bpmnElementPropertyList[this.editingPropertyIndex],
           {
@@ -181,12 +181,12 @@ export default {
         )
       } else {
         // 新建属性字段
-        const newPropertyObject = this.modelerStore.moddle.create(
+        const newPropertyObject = modelerStore.moddle.create(
           `flowable:Property`,
           { name, value }
         )
         // 新建一个属性字段的保存列表
-        const propertiesObject = this.modelerStore.moddle.create(
+        const propertiesObject = modelerStore.moddle.create(
           `flowable:Properties`,
           {
             values: this.bpmnElementPropertyList.concat([newPropertyObject]),
@@ -198,14 +198,14 @@ export default {
       this.resetAttributesList()
     },
     updateElementExtensions(properties) {
-      const extensions = this.modelerStore.moddle.create(
+      const extensions = modelerStore.moddle.create(
         'bpmn:ExtensionElements',
         {
           values: this.otherExtensionList.concat([properties]),
         }
       )
 
-      this.modelerStore.modeling.updateProperties(this.bpmnElement, {
+      modelerStore.modeling.updateProperties(this.bpmnElement, {
         extensionElements: extensions,
       })
     },

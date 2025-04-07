@@ -3,7 +3,7 @@
     <el-form label-width="80px" size="small">
       <el-form-item label="异步">
         <el-switch
-          v-model:value="bpmnFormData.async"
+          v-model="bpmnFormData.async"
           active-text="是"
           inactive-text="否"
           @change="updateElementTask('async')"
@@ -11,7 +11,7 @@
       </el-form-item>
       <el-form-item label="用户类型">
         <el-select
-          v-model:value="bpmnFormData.userType"
+          v-model="bpmnFormData.userType"
           placeholder="选择人员"
           @change="updateUserType"
         >
@@ -29,7 +29,7 @@
         v-if="bpmnFormData.userType === 'assignee'"
       >
         <el-input-tag
-          v-model:value="bpmnFormData.assignee"
+          v-model="bpmnFormData.assignee"
           :value="bpmnFormData.assignee"
         />
         <el-button-group class="ml-4" style="margin-top: 4px">
@@ -43,7 +43,7 @@
             <el-button
               size="small"
               type="primary"
-              icon="el-icon-user"
+              icon="User"
               @click="singleUserCheck"
             />
           </el-tooltip>
@@ -57,7 +57,7 @@
             <el-button
               size="small"
               type="warning"
-              icon="el-icon-postcard"
+              icon="Postcard"
               @click="singleExpCheck"
             />
           </el-tooltip>
@@ -69,7 +69,7 @@
         v-else-if="bpmnFormData.userType === 'candidateUsers'"
       >
         <el-input-tag
-          v-model:value="bpmnFormData.candidateUsers"
+          v-model="bpmnFormData.candidateUsers"
           :value="bpmnFormData.candidateUsers"
         />
         <el-button-group class="ml-4" style="margin-top: 4px">
@@ -106,7 +106,7 @@
 
       <el-form-item label="候选角色" v-else>
         <el-input-tag
-          v-model:value="bpmnFormData.candidateGroups"
+          v-model="bpmnFormData.candidateGroups"
           :value="bpmnFormData.candidateGroups"
         />
         <el-button-group class="ml-4" style="margin-top: 4px">
@@ -143,13 +143,13 @@
 
       <el-form-item label="优先级">
         <el-input
-          v-model:value="bpmnFormData.priority"
+          v-model="bpmnFormData.priority"
           @change="updateElementTask('priority')"
         />
       </el-form-item>
       <el-form-item label="到期时间">
         <el-input
-          v-model:value="bpmnFormData.dueDate"
+          v-model="bpmnFormData.dueDate"
           @change="updateElementTask('dueDate')"
         />
       </el-form-item>
@@ -158,7 +158,7 @@
     <!--选择人员-->
     <el-dialog
       title="选择人员"
-      v-model:visible="userVisible"
+      v-model="userVisible"
       width="60%"
       :close-on-press-escape="false"
       :show-close="false"
@@ -182,7 +182,7 @@
     <!--选择角色-->
     <el-dialog
       title="选择候选角色"
-      v-model:visible="roleVisible"
+      v-model="roleVisible"
       width="60%"
       :close-on-press-escape="false"
       :show-close="false"
@@ -205,7 +205,7 @@
     <!--选择表达式-->
     <el-dialog
       title="选择表达式"
-      v-model:visible="expVisible"
+      v-model="expVisible"
       width="60%"
       :close-on-press-escape="false"
       :show-close="false"
@@ -233,7 +233,7 @@ import FlowRole from '@/components/flow/Role'
 import FlowExp from '@/components/flow/Expression'
 import ElInputTag from '@/components/flow/ElInputTag'
 import { StrUtil } from '@/utils/StrUtil'
-
+import modelerStore from '@/components/Process/common/global'
 export default {
   name: 'TaskPanel',
   components: {
@@ -323,7 +323,7 @@ export default {
       // 流程节点信息上取值
       for (let key in this.bpmnFormData) {
         const value =
-          this.modelerStore.element?.businessObject[key] ||
+          modelerStore.element?.businessObject[key] ||
           this.bpmnFormData[key]
         this.bpmnFormData[key] = value
       }
@@ -335,8 +335,8 @@ export default {
     updateElementTask(key) {
       const taskAttr = Object.create(null)
       taskAttr[key] = this.bpmnFormData[key] || ''
-      this.modelerStore.modeling.updateProperties(
-        this.modelerStore.element,
+      modelerStore.modeling.updateProperties(
+        modelerStore.element,
         taskAttr
       )
     },
@@ -345,8 +345,8 @@ export default {
     updateCustomElement(key, value) {
       const taskAttr = Object.create(null)
       taskAttr[key] = value
-      this.modelerStore.modeling.updateProperties(
-        this.modelerStore.element,
+      modelerStore.modeling.updateProperties(
+        modelerStore.element,
         taskAttr
       )
     },
@@ -355,7 +355,7 @@ export default {
     updateUserType(val) {
       // 删除xml中已选择数据类型节点
       this.deleteFlowAttar()
-      delete this.modelerStore.element.businessObject[`userType`]
+      delete modelerStore.element.businessObject[`userType`]
       // 清除已选人员数据
       this.bpmnFormData[val] = null
       this.selectData = {
@@ -384,10 +384,10 @@ export default {
     // 获取表达式信息
     getExpList(val, key) {
       if (StrUtil.isNotBlank(val)) {
-        this.bpmnFormData[key] = this.modelerStore.expList?.find(
+        this.bpmnFormData[key] = modelerStore.expList?.find(
           (item) => item.id.toString() === val
         ).name
-        this.selectData.exp = this.modelerStore.expList?.find(
+        this.selectData.exp = modelerStore.expList?.find(
           (item) => item.id.toString() === val
         ).id
       }
@@ -396,7 +396,7 @@ export default {
     // 获取人员信息
     getUserList(val, key) {
       if (StrUtil.isNotBlank(val)) {
-        const newArr = this.modelerStore.userList?.filter((i) =>
+        const newArr = modelerStore.userList?.filter((i) =>
           val.split(',').includes(i.userId.toString())
         )
         this.bpmnFormData[key] = newArr.map((item) => item.nickName).join(',')
@@ -413,7 +413,7 @@ export default {
     // 获取角色信息
     getRoleList(val, key) {
       if (StrUtil.isNotBlank(val)) {
-        const newArr = this.modelerStore.roleList?.filter((i) =>
+        const newArr = modelerStore.roleList?.filter((i) =>
           val.split(',').includes(i.roleId.toString())
         )
         this.bpmnFormData[key] = newArr.map((item) => item.roleName).join(',')
@@ -537,11 +537,11 @@ export default {
 
     // 删除节点
     deleteFlowAttar() {
-      delete this.modelerStore.element.businessObject[`dataType`]
-      delete this.modelerStore.element.businessObject[`expId`]
-      delete this.modelerStore.element.businessObject[`assignee`]
-      delete this.modelerStore.element.businessObject[`candidateUsers`]
-      delete this.modelerStore.element.businessObject[`candidateGroups`]
+      delete modelerStore.element.businessObject[`dataType`]
+      delete modelerStore.element.businessObject[`expId`]
+      delete modelerStore.element.businessObject[`assignee`]
+      delete modelerStore.element.businessObject[`candidateUsers`]
+      delete modelerStore.element.businessObject[`candidateGroups`]
     },
 
     // 去重数据
@@ -554,14 +554,14 @@ export default {
 
     // 更新扩展属性信息
     updateElementExtensions(properties) {
-      const extensions = this.modelerStore.moddle.create(
+      const extensions = modelerStore.moddle.create(
         'bpmn:ExtensionElements',
         {
           values: this.otherExtensionList.concat([properties]),
         }
       )
 
-      this.modelerStore.modeling.updateProperties(this.modelerStore.element, {
+      modelerStore.modeling.updateProperties(modelerStore.element, {
         extensionElements: extensions,
       })
     },

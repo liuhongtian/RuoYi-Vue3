@@ -13,18 +13,18 @@
                   <br />条件流转路径：是计算其每个出口顺序流上的条件。当条件计算为true时，选择该出口顺序流。如果该方法选择了多条顺序流，则会生成多个执行，流程会以并行方式继续。
                 </div>
               </template>
-              <i class="el-icon-question" />
+                <i class="el-icon-question" />
             </el-tooltip>
           </span>
         </template>
-        <el-select v-model:value="bpmnFormData.type" @change="updateFlowType">
+        <el-select v-model="bpmnFormData.type" @change="updateFlowType">
           <el-option label="普通流转路径" value="normal" />
           <el-option label="默认流转路径" value="default" />
           <el-option label="条件流转路径" value="condition" />
         </el-select>
       </el-form-item>
       <el-form-item label="条件格式" v-if="bpmnFormData.type === 'condition'">
-        <el-select v-model:value="bpmnFormData.conditionType">
+        <el-select v-model="bpmnFormData.conditionType">
           <el-option label="表达式" value="expression" />
           <el-option label="脚本" value="script" />
         </el-select>
@@ -37,7 +37,7 @@
         "
       >
         <el-input
-          v-model:value="bpmnFormData.body"
+          v-model="bpmnFormData.body"
           clearable
           @change="updateFlowCondition"
         />
@@ -49,13 +49,13 @@
       >
         <el-form-item label="脚本语言" key="language">
           <el-input
-            v-model:value="bpmnFormData.language"
+            v-model="bpmnFormData.language"
             clearable
             @change="updateFlowCondition"
           />
         </el-form-item>
         <el-form-item label="脚本类型" key="scriptType">
-          <el-select v-model:value="bpmnFormData.scriptType">
+          <el-select v-model="bpmnFormData.scriptType">
             <el-option label="内联脚本" value="inlineScript" />
             <el-option label="外部脚本" value="externalScript" />
           </el-select>
@@ -65,7 +65,7 @@
           v-if="bpmnFormData.scriptType === 'inlineScript'"
         >
           <el-input
-            v-model:value="bpmnFormData.body"
+            v-model="bpmnFormData.body"
             type="textarea"
             clearable
             @change="updateFlowCondition"
@@ -76,7 +76,7 @@
           v-if="bpmnFormData.scriptType === 'externalScript'"
         >
           <el-input
-            v-model:value="bpmnFormData.resource"
+            v-model="bpmnFormData.resource"
             clearable
             @change="updateFlowCondition"
           />
@@ -88,6 +88,7 @@
 
 <script>
 import { StrUtil } from '@/utils/StrUtil'
+import modelerStore from '@/components/Process/common/global'
 export default {
   name: 'BpmnModel',
   /** 组件传值  */
@@ -127,25 +128,25 @@ export default {
       this.bpmnFormData = {
         body: null,
       }
-      this.bpmnElementSource = this.modelerStore.element.source
+      this.bpmnElementSource = modelerStore.element.source
       this.bpmnElementSourceRef =
-        this.modelerStore.element.businessObject.sourceRef
+        modelerStore.element.businessObject.sourceRef
       if (
         this.bpmnElementSourceRef &&
         this.bpmnElementSourceRef.default &&
-        this.bpmnElementSourceRef.default.id === this.modelerStore.element.id
+        this.bpmnElementSourceRef.default.id === modelerStore.element.id
       ) {
         // 默认
         this.bpmnFormData['type'] = 'default'
       } else if (
-        !this.modelerStore.element.businessObject.conditionExpression
+        !modelerStore.element.businessObject.conditionExpression
       ) {
         // 普通
         this.bpmnFormData['type'] = 'normal'
       } else {
         // 带条件
         const conditionExpression =
-          this.modelerStore.element.businessObject.conditionExpression
+          modelerStore.element.businessObject.conditionExpression
         this.bpmnFormData = { ...conditionExpression, type: 'condition' }
         // resource 可直接标识 是否是外部资源脚本
         if (this.bpmnFormData.resource) {
@@ -165,21 +166,21 @@ export default {
     updateFlowType(flowType) {
       // 正常条件类
       if (flowType === 'condition') {
-        const flowConditionRef = this.modelerStore.moddle.create(
+        const flowConditionRef = modelerStore.moddle.create(
           'bpmn:FormalExpression'
         )
-        this.modelerStore.modeling.updateProperties(this.modelerStore.element, {
+        modelerStore.modeling.updateProperties(modelerStore.element, {
           conditionExpression: flowConditionRef,
         })
         return
       }
       // 默认路径
       if (flowType === 'default') {
-        this.modelerStore.modeling.updateProperties(this.modelerStore.element, {
+        modelerStore.modeling.updateProperties(modelerStore.element, {
           conditionExpression: null,
         })
-        this.modelerStore.modeling.updateProperties(this.bpmnElementSource, {
-          default: this.modelerStore.element,
+        modelerStore.modeling.updateProperties(this.bpmnElementSource, {
+          default: modelerStore.element,
         })
         // 清空条件格式
         this.bpmnFormData.conditionType = null
@@ -190,13 +191,13 @@ export default {
       // 正常路径，如果来源节点的默认路径是当前连线时，清除父元素的默认路径配置
       if (
         this.bpmnElementSourceRef.default &&
-        this.bpmnElementSourceRef.default.id === this.modelerStore.element.id
+        this.bpmnElementSourceRef.default.id === modelerStore.element.id
       ) {
-        this.modelerStore.modeling.updateProperties(this.bpmnElementSource, {
+        modelerStore.modeling.updateProperties(this.bpmnElementSource, {
           default: null,
         })
       }
-      this.modelerStore.modeling.updateProperties(this.modelerStore.element, {
+      modelerStore.modeling.updateProperties(modelerStore.element, {
         conditionExpression: null,
       })
     },
@@ -206,25 +207,25 @@ export default {
         this.bpmnFormData
       let condition
       if (conditionType === 'expression') {
-        condition = this.modelerStore.moddle.create('bpmn:FormalExpression', {
+        condition = modelerStore.moddle.create('bpmn:FormalExpression', {
           body,
         })
       } else {
         if (scriptType === 'inlineScript') {
-          condition = this.modelerStore.moddle.create('bpmn:FormalExpression', {
+          condition = modelerStore.moddle.create('bpmn:FormalExpression', {
             body,
             language,
           })
           this.bpmnFormData['resource'] = ''
         } else {
           this.bpmnFormData['body'] = ''
-          condition = this.modelerStore.moddle.create('bpmn:FormalExpression', {
+          condition = modelerStore.moddle.create('bpmn:FormalExpression', {
             resource,
             language,
           })
         }
       }
-      this.modelerStore.modeling.updateProperties(this.modelerStore.element, {
+      modelerStore.modeling.updateProperties(modelerStore.element, {
         conditionExpression: condition,
       })
     },

@@ -3,19 +3,19 @@
     <el-form label-width="80px" size="small" @submit.prevent>
       <el-form-item label="跳过表达式">
         <el-input
-          v-model:value="bpmnFormData.skipExpression"
+          v-model="bpmnFormData.skipExpression"
           @change="updateElementTask('skipExpression')"
         />
       </el-form-item>
       <el-form-item label="是否为补偿">
         <el-input
-          v-model:value="bpmnFormData.isForCompensation"
+          v-model="bpmnFormData.isForCompensation"
           @change="updateElementTask('isForCompensation')"
         />
       </el-form-item>
       <el-form-item label="服务任务可触发">
         <el-input
-          v-model:value="bpmnFormData.triggerable"
+          v-model="bpmnFormData.triggerable"
           @change="updateElementTask('triggerable')"
         />
       </el-form-item>
@@ -25,6 +25,7 @@
 
 <script>
 import { StrUtil } from '@/utils/StrUtil'
+import modelerStore from '@/components/Process/common/global'
 export default {
   name: 'OtherPanel',
   /** 组件传值  */
@@ -60,15 +61,15 @@ export default {
     // 方法区
     resetFlowForm() {
       this.bpmnFormData = JSON.parse(
-        JSON.stringify(this.modelerStore.element.businessObject)
+        JSON.stringify(modelerStore.element.businessObject)
       )
     },
 
     updateElementTask(key) {
       const taskAttr = Object.create(null)
       taskAttr[key] = this.bpmnFormData[key] || null
-      this.modelerStore.modeling.updateProperties(
-        this.modelerStore.element,
+      modelerStore.modeling.updateProperties(
+        modelerStore.element,
         taskAttr
       )
     },

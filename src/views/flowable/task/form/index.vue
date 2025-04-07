@@ -123,7 +123,7 @@
     <!--表单设计器-->
     <el-dialog
       custom-class="dialogClass"
-      v-model:visible="dialogVisible"
+      v-model="dialogVisible"
       :close-on-press-escape="false"
       :fullscreen="true"
       :before-close="handleClose"
@@ -142,7 +142,7 @@
     <!--系统表单信息-->
     <el-dialog
       :title="formTitle"
-      v-model:visible="formOpen"
+      v-model="formOpen"
       width="500px"
       append-to-body
     >

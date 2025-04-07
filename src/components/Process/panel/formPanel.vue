@@ -3,7 +3,7 @@
     <el-form label-width="80px" size="small" @submit.prevent>
       <el-form-item label="流程表单">
         <el-select
-          v-model:value="bpmnFormData.formKey"
+          v-model="bpmnFormData.formKey"
           clearable
           class="m-2"
           placeholder="挂载节点表单"
@@ -24,6 +24,7 @@
 <script>
 import { listAllForm } from '@/api/flowable/form'
 import { StrUtil } from '@/utils/StrUtil'
+import modelerStore from '@/components/Process/common/global'
 export default {
   name: 'FormPanel',
   /** 组件传值  */
@@ -62,14 +63,14 @@ export default {
     // 方法区
     resetFlowForm() {
       this.bpmnFormData.formKey =
-        this.modelerStore.element.businessObject.formKey
+        modelerStore.element.businessObject.formKey
     },
 
     updateElementFormKey(val) {
       if (StrUtil.isBlank(val)) {
-        delete this.modelerStore.element.businessObject[`formKey`]
+        delete modelerStore.element.businessObject[`formKey`]
       } else {
-        this.modelerStore.modeling.updateProperties(this.modelerStore.element, {
+        modelerStore.modeling.updateProperties(modelerStore.element, {
           formKey: val,
         })
       }
