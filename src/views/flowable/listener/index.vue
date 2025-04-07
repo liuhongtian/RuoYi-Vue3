@@ -1,224 +1,100 @@
 <template>
   <div class="app-container">
-    <el-form
-      :model="queryParams"
-      ref="queryForm"
-      size="small"
-      :inline="true"
-      v-show="showSearch"
-      label-width="68px"
-    >
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="名称" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入名称"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-input v-model="queryParams.name" placeholder="请输入名称" clearable @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="监听类型" prop="type">
-        <el-select
-          v-model="queryParams.type"
-          placeholder="请选择监听类型"
-          clearable
-        >
-          <el-option
-            v-for="dict in sys_listener_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+        <el-select v-model="queryParams.type" placeholder="请选择监听类型" clearable style="width: 125px;">
+          <el-option v-for="dict in sys_listener_type" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          size="small"
-          @click="handleQuery"
-          >搜索</el-button
-        >
-        <el-button icon="el-icon-refresh" size="small" @click="resetQuery"
-          >重置</el-button
-        >
+        <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="small"
-          @click="handleAdd"
-          v-hasPermi="['system:listener:add']"
-          >新增</el-button
-        >
+        <el-button type="primary" plain icon="el-icon-plus" size="small" @click="handleAdd"
+          v-hasPermi="['system:listener:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="small"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:listener:edit']"
-          >修改</el-button
-        >
+        <el-button type="success" plain icon="el-icon-edit" size="small" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['system:listener:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="small"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:listener:remove']"
-          >删除</el-button
-        >
+        <el-button type="danger" plain icon="el-icon-delete" size="small" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['system:listener:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="small"
-          @click="handleExport"
-          v-hasPermi="['system:listener:export']"
-          >导出</el-button
-        >
+        <el-button type="warning" plain icon="el-icon-download" size="small" @click="handleExport"
+          v-hasPermi="['system:listener:export']">导出</el-button>
       </el-col>
-      <right-toolbar
-        v-model:showSearch="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
+      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table
-      v-loading="loading"
-      :data="listenerList"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table v-loading="loading" :data="listenerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="监听类型" align="center" prop="type">
         <template v-slot="scope">
-          <dict-tag 
-            :options="sys_listener_type"
-            :value="scope.row.type"
-          />
+          <dict-tag :options="sys_listener_type" :value="scope.row.type" />
         </template>
       </el-table-column>
       <el-table-column label="事件类型" align="center" prop="eventType" />
       <el-table-column label="值类型" align="center" prop="valueType">
         <template v-slot="scope">
-          <dict-tag
-            :options="sys_listener_value_type"
-            :value="scope.row.valueType"
-          />
+          <dict-tag :options="sys_listener_value_type" :value="scope.row.valueType" />
         </template>
       </el-table-column>
       <el-table-column label="执行内容" align="center" prop="value" />
-      <el-table-column
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template v-slot="scope">
-          <el-button
-            size="small"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:listener:edit']"
-            >修改</el-button
-          >
-          <el-button
-            size="small"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:listener:remove']"
-            >删除</el-button
-          >
+          <el-button size="small" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['system:listener:edit']">修改</el-button>
+          <el-button size="small" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['system:listener:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize" @pagination="getList" />
 
     <!-- 添加或修改流程监听对话框 -->
-    <el-dialog
-      :title="title"
-      v-model="open"
-      width="500px"
-      append-to-body
-    >
+    <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称" prop="name">
-          <el-input v-model:value="form.name" placeholder="请输入名称" />
+          <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
         <el-form-item label="监听类型" prop="type">
-          <el-select v-model:value="form.type" placeholder="请选择监听类型">
-            <el-option
-              v-for="dict in sys_listener_type"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
+          <el-select v-model="form.type" placeholder="请选择监听类型">
+            <el-option v-for="dict in sys_listener_type" :key="dict.value" :label="dict.label"
+              :value="dict.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="事件类型"
-          prop="eventType"
-          v-if="form.type === '1'"
-        >
-          <el-select
-            v-model:value="form.eventType"
-            placeholder="请选择事件类型"
-          >
-            <el-option
-              v-for="dict in taskListenerEventList"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
+        <el-form-item label="事件类型" prop="eventType" v-if="form.type === '1'">
+          <el-select v-model="form.eventType" placeholder="请选择事件类型">
+            <el-option v-for="dict in taskListenerEventList" :key="dict.value" :label="dict.label"
+              :value="dict.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="事件类型" prop="eventType" v-else>
-          <el-select
-            v-model:value="form.eventType"
-            placeholder="请选择事件类型"
-          >
-            <el-option
-              v-for="dict in executionListenerEventList"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
+          <el-select v-model="form.eventType" placeholder="请选择事件类型">
+            <el-option v-for="dict in executionListenerEventList" :key="dict.value" :label="dict.label"
+              :value="dict.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="值类型" prop="valueType">
-          <el-radio-group v-model:value="form.valueType">
-            <el-radio
-              v-for="dict in sys_listener_value_type"
-              :key="dict.value"
-              :label="dict.value"
-              >{{ dict.label }}</el-radio
-            >
+          <el-radio-group v-model="form.valueType">
+            <el-radio v-for="dict in sys_listener_value_type" :key="dict.value" :label="dict.value">{{ dict.label
+              }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="执行内容" prop="value">
-          <el-input v-model:value="form.value" placeholder="请输入执行内容" />
+          <el-input v-model="form.value" placeholder="请输入执行内容" />
         </el-form-item>
       </el-form>
       <template v-slot:footer>
@@ -240,11 +116,9 @@ import {
   updateListener,
 } from '@/api/flowable/listener'
 
-const { proxy } = getCurrentInstance();
-const { sys_listener_value_type } = proxy.useDict('sys_listener_value_type');
-const { sys_listener_type } = proxy.useDict('sys_listener_type');
-const { common_status } = proxy.useDict('common_status');
-const { sys_listener_event_type } = proxy.useDict('sys_listener_event_type');
+import { useDict } from '@/utils/dict'
+
+
 
 export default {
   name: 'Listener',
@@ -283,6 +157,11 @@ export default {
       form: {},
       // 表单校验
       rules: {},
+
+      sys_listener_value_type: [],
+
+      sys_listener_type: [],
+
       taskListenerEventList: [
         { label: 'create', value: 'create' },
         { label: 'assignment', value: 'assignment' },
@@ -297,6 +176,8 @@ export default {
     }
   },
   created() {
+    this.sys_listener_value_type = useDict('sys_listener_value_type').sys_listener_value_type;
+    this.sys_listener_type = useDict('sys_listener_type').sys_listener_type;
     this.getList()
   },
   methods: {
@@ -396,7 +277,7 @@ export default {
           this.getList()
           this.$modal.msgSuccess('删除成功')
         })
-        .catch(() => {})
+        .catch(() => { })
     },
     /** 导出按钮操作 */
     handleExport() {

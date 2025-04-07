@@ -281,7 +281,7 @@
                 placeholder="请选择流程分类"
               >
                 <el-option
-                  v-for="dict in dict.type.sys_process_category"
+                  v-for="dict in sys_process_category"
                   :key="dict.value"
                   :label="dict.label"
                   :value="dict.value"
@@ -408,6 +408,7 @@ import { getToken } from '@/utils/auth'
 import { getForm, addDeployForm, listForm } from '@/api/flowable/form'
 import BpmnViewer from '@/components/Process/viewer'
 import Model from './model'
+import { useDict } from '@/utils/dict'
 
 export default {
   name: 'Definition',
@@ -418,6 +419,7 @@ export default {
   },
   data() {
     return {
+      sys_process_category: [],
       // 遮罩层
       loading: true,
       dialogVisible: false,
@@ -495,8 +497,9 @@ export default {
       // 表单校验
       rules: {},
     }
-  },
+  }, 
   created() {
+    this.sys_process_category = useDict('sys_process_category').sys_process_category;
     this.getList()
   },
   activated() {

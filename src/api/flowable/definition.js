@@ -97,7 +97,6 @@ export function flowXmlAndNode(query) {
 
 // 读取xml文件
 export function saveXml(data) {
-  alert(data)
   return request({
     url: '/flowable/definition/save',
     method: 'post',

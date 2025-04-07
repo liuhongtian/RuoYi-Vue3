@@ -31,7 +31,7 @@
             @change="updateElementTask('processCategory')"
           >
             <el-option
-              v-for="dict in dict.type.sys_process_category"
+              v-for="dict in sys_process_category"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
@@ -60,6 +60,8 @@
 <script>
 import { StrUtil } from '@/utils/StrUtil'
 import modelerStore from '@/components/Process/common/global'
+import { useDict } from '@/utils/dict'
+
 export default {
   name: 'CommonPanel',
   dicts: ['sys_process_category'],
@@ -72,6 +74,7 @@ export default {
   },
   data() {
     return {
+      sys_process_category: [],
       rules: {
         id: [{ required: true, message: '节点Id 不能为空', trigger: 'blur' }],
         name: [
@@ -97,7 +100,9 @@ export default {
     },
   },
 
-  created() {},
+  created() {
+    this.sys_process_category = useDict('sys_process_category').sys_process_category;
+  },
   methods: {
     resetTaskForm() {
       this.bpmnFormData = JSON.parse(
