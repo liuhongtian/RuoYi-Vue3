@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-      if (tab.name === '2') {
+      if (tab.props.name === '2') {
         flowXmlAndNode({ deployId: this.deployId }).then((res) => {
           this.flowData = res.data
         })

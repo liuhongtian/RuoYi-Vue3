@@ -315,7 +315,7 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-      if (tab.name === '3') {
+      if (tab.props.name === '3') {
         flowXmlAndNode({
           procInsId: this.taskForm.procInsId,
           deployId: this.taskForm.deployId,
