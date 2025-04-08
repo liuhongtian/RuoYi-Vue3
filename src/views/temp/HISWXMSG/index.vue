@@ -43,25 +43,6 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['temp:HISWXMSG:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['temp:HISWXMSG:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="danger"
           plain
           icon="Delete"
@@ -86,7 +67,7 @@
       <el-table-column type="selection" width="55" align="center" fixed="left" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="left">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['temp:HISWXMSG:edit']">修改</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['temp:HISWXMSG:edit']">查看</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['temp:HISWXMSG:remove']">删除</el-button>
         </template>
       </el-table-column>
@@ -249,23 +230,7 @@ function handleUpdate(row) {
 
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs["HISWXMSGRef"].validate(valid => {
-    if (valid) {
-      if (form.value.pkId != null) {
-        updateHISWXMSG(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功");
-          open.value = false;
-          getList();
-        });
-      } else {
-        addHISWXMSG(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功");
-          open.value = false;
-          getList();
-        });
-      }
-    }
-  });
+  open.value = false;
 }
 
 /** 删除按钮操作 */

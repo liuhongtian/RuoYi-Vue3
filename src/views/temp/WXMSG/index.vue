@@ -52,16 +52,6 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['temp:WXMSG:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="danger"
           plain
           icon="Delete"
@@ -121,11 +111,11 @@
     <!-- 添加或修改待发送消息对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="WXMSGRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="消息接收人" prop="recvUser">
-          <el-input v-model="form.recvUser" placeholder="请输入消息接收人" />
+        <el-form-item label="接收人" prop="recvUser">
+          <el-input v-model="form.recvUser" placeholder="请输入接收人企业微信帐号" />
         </el-form-item>
         <el-form-item label="消息内容">
-          <editor v-model="form.messageContent" :min-height="192"/>
+          <el-input v-model="form.messageContent" placeholder="请输入消息内容" />
         </el-form-item>
       </el-form>
       <template #footer>
