@@ -6,6 +6,9 @@
       <el-form-item label="手机号码" prop="phonenumber">
          <el-input v-model="form.phonenumber" maxlength="11" />
       </el-form-item>
+      <el-form-item label="企业微信" prop="workwx">
+         <el-input v-model="form.workwx" maxlength="40" />
+      </el-form-item>
       <el-form-item label="邮箱" prop="email">
          <el-input v-model="form.email" maxlength="50" />
       </el-form-item>
@@ -46,7 +49,9 @@ function submit() {
     if (valid) {
       updateUserProfile(form.value).then(response => {
         proxy.$modal.msgSuccess("修改成功");
+        props.user.nickName = form.value.nickName;
         props.user.phonenumber = form.value.phonenumber;
+        props.user.workwx = form.value.workwx;
         props.user.email = form.value.email;
       });
     }
@@ -61,7 +66,7 @@ function close() {
 // 回显当前登录用户信息
 watch(() => props.user, user => {
   if (user) {
-    form.value = { nickName: user.nickName, phonenumber: user.phonenumber, email: user.email, sex: user.sex };
+    form.value = { nickName: user.nickName, phonenumber: user.phonenumber, workwx: user.workwx, email: user.email, sex: user.sex };
   }
 },{ immediate: true });
 </script>

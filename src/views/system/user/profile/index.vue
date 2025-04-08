@@ -22,6 +22,10 @@
                         <div class="pull-right">{{ state.user.phonenumber }}</div>
                      </li>
                      <li class="list-group-item">
+                        <svg-icon icon-class="workwx" />企业微信
+                        <div class="pull-right">{{ state.user.workwx }}</div>
+                     </li>
+                     <li class="list-group-item">
                         <svg-icon icon-class="email" />用户邮箱
                         <div class="pull-right">{{ state.user.email }}</div>
                      </li>
