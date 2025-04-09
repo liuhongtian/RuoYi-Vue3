@@ -425,7 +425,7 @@ export default {
       const listenerObject = createListenerObject(
         modelerStore.moddle,
         this.listenerForm,
-        false,
+        true,
         'flowable'
       )
       if (this.editingListenerIndex === -1) {
