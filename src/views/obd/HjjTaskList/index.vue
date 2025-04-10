@@ -145,7 +145,7 @@
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="HjjTaskListList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
+    <el-table v-loading="loading" :data="HjjTaskListList" @selection-change="handleSelectionChange" @sort-change="handleSortChange" :header-cell-style="{ padding: '0' }" :cell-style="{ padding: '0' }">
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="left">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['obd:HjjTaskList:edit']">查看详情</el-button>
@@ -161,8 +161,8 @@
       <el-table-column label="采样状态" align="center">       
         <template #default="scope">
           <div v-if="scope.row.clockIn">
-            <div v-if="scope.row.ypfxTime" class="bg-green">采样</div>
-            <div v-else class="bg-blue">采样</div>
+            <div v-if="scope.row.ypfxTime" width="100%" class="bg-green">采样</div>
+            <div v-else width="100%" class="bg-blue">采样</div>
           </div>
           <div v-else class="bg-gray">采样</div>
         </template>
@@ -170,8 +170,8 @@
       <el-table-column label="交接状态" align="center">       
         <template #default="scope">
           <div v-if="scope.row.ypfxTime">
-            <div v-if="scope.row.actualSyTime" class="bg-green">交接</div>
-            <div v-else class="bg-blue">交接</div>
+            <div v-if="scope.row.actualSyTime" width="100%" class="bg-green">交接</div>
+            <div v-else width="100%" class="bg-blue">交接</div>
           </div>
           <div v-else class="bg-gray">交接</div>
         </template>
@@ -179,8 +179,8 @@
       <el-table-column label="运输状态" align="center">       
         <template #default="scope">
           <div v-if="scope.row.actualSyTime">
-            <div v-if="scope.row.actualTestStationTime" class="bg-green">运输</div>
-            <div v-else class="bg-blue">运输</div>
+            <div v-if="scope.row.actualTestStationTime" width="100%" class="bg-green">运输</div>
+            <div v-else width="100%" class="bg-blue">运输</div>
           </div>
           <div v-else class="bg-gray">运输</div>
         </template>
@@ -188,8 +188,8 @@
       <el-table-column label="检测状态" align="center">       
         <template #default="scope">
           <div v-if="scope.row.actualTestStationTime">
-            <div v-if="scope.row.testResultTime" class="bg-green">检测</div>
-            <div v-else class="bg-blue">检测</div>
+            <div v-if="scope.row.testResultTime" width="100%" class="bg-green">检测</div>
+            <div v-else width="100%" class="bg-blue">检测</div>
           </div>
           <div v-else class="bg-gray">检测</div>
         </template>
@@ -207,7 +207,7 @@
     <!-- 添加或修改水样采样跟踪对话框 -->
     <el-dialog :title="title" v-model="open" width="65%" append-to-body>
       <div style="display: flex; justify-content: space-between; width: 100%; height: 300px; background-color: #f0f0f0;">
-        
+        <img src="../../../assets/images/gantt.png" style="width: 100%; height: 100%;" />
       </div>
       <hr/>
       <template #header>
@@ -382,6 +382,7 @@
 
 <script setup name="HjjTaskList">
 import { listHjjTaskList, getHjjTaskList, delHjjTaskList, addHjjTaskList, updateHjjTaskList } from "@/api/obd/HjjTaskList";
+//import gantt from '@assets/images/gantt.png';
 
 const { proxy } = getCurrentInstance();
 const { task_schedule_status } = proxy.useDict('task_schedule_status');
