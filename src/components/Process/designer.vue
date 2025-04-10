@@ -8,25 +8,31 @@
     <el-collapse v-model="activeName" >
         <!--   常规信息     -->
         <el-collapse-item name="common">
-          <template slot="title"><i class="el-icon-info"></i> 常规信息</template>
+          <template v-slot:title><el-icon><InfoFilled /></el-icon> 常规信息</template>
           <common-panel :id="elementId"/>
         </el-collapse-item>
 
         <!--   任务信息     -->
         <el-collapse-item name="Task" v-if="elementType.indexOf('Task') !== -1">
-          <template slot="title"><i class="el-icon-s-claim"></i> 任务配置</template>
+          <template v-slot:title><el-icon><Management /></el-icon> 任务配置</template>
           <user-task-panel :id="elementId"/>
+        </el-collapse-item>
+
+        <!--   按钮     -->
+        <el-collapse-item name="buttons" v-if="elementType === 'UserTask'">
+          <template v-slot:title><el-icon><Platform /></el-icon> 按钮配置</template>
+          <buttons-panel :id="elementId"/>
         </el-collapse-item>
 
         <!--   表单     -->
         <el-collapse-item name="form" v-if="formVisible">
-          <template slot="title"><i class="el-icon-s-order"></i> 表单配置</template>
+          <template v-slot:title><el-icon><Platform /></el-icon> 表单配置</template>
           <form-panel :id="elementId"/>
         </el-collapse-item>
 
         <!--   执行监听器     -->
         <el-collapse-item name="executionListener">
-          <template slot="title"><i class="el-icon-s-promotion"></i> 执行监听器
+          <template v-slot:title><el-icon><Promotion /></el-icon> 执行监听器
              <el-badge :value="executionListenerCount" class="item" type="primary"/>
            </template>
           <execution-listener :id="elementId" @getExecutionListenerCount="getExecutionListenerCount"/>
@@ -34,7 +40,7 @@
 
         <!--   任务监听器     -->
         <el-collapse-item name="taskListener" v-if="elementType === 'UserTask'" >
-          <template slot="title"><i class="el-icon-s-flag"></i> 任务监听器
+          <template v-slot:title><el-icon><Flag /></el-icon> 任务监听器
             <el-badge :value="taskListenerCount" class="item" type="primary"/>
           </template>
           <task-listener :id="elementId" @getTaskListenerCount="getTaskListenerCount"/>
@@ -42,18 +48,18 @@
 
         <!--   多实例     -->
         <el-collapse-item name="multiInstance" v-if="elementType.indexOf('Task') !== -1" >
-          <template slot="title"><i class="el-icon-s-grid"></i> 多实例</template>
+          <template v-slot:title><el-icon><Grid /></el-icon> 多实例</template>
           <multi-instance :id="elementId"/>
         </el-collapse-item>
         <!--   流转条件     -->
         <el-collapse-item name="condition" v-if="conditionVisible" >
-          <template slot="title"><i class="el-icon-share"></i> 流转条件</template>
+          <template v-slot:title><el-icon><Share /></el-icon> 流转条件</template>
           <condition-panel :id="elementId"/>
         </el-collapse-item>
 
         <!--   扩展属性     -->
         <el-collapse-item name="properties" >
-          <template slot="title"><i class="el-icon-circle-plus"></i> 扩展属性</template>
+          <template v-slot:title><el-icon><CirclePlusFilled /></el-icon> 扩展属性</template>
           <properties-panel :id="elementId"/>
         </el-collapse-item>
 
@@ -71,7 +77,7 @@ import ConditionPanel from './panel/conditionPanel'
 import FormPanel from './panel/formPanel'
 import OtherPanel from './panel/otherPanel'
 import PropertiesPanel from './panel/PropertiesPanel'
-
+import ButtonsPanel from './panel/ButtonsPanel'
 import { translateNodeName } from "./common/bpmnUtils";
 import FlowUser from "@/components/flow/User/index.vue";
 import FlowRole from "@/components/flow/Role/index.vue";
@@ -92,6 +98,7 @@ export default {
     FlowUser,
     FlowRole,
     FlowExp,
+    ButtonsPanel,
   },
   data() {
     return {

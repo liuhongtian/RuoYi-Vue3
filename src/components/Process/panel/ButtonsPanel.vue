@@ -4,14 +4,14 @@
     <el-table :data="elementButtonList" size="small" max-height="240" border fit>
       <el-table-column label="序号" width="50px" type="index" />
       <el-table-column
-        label="属性名"
+        label="名称"
         prop="name"
         min-width="100px"
         show-overflow-tooltip
       />
       <el-table-column
-        label="属性值"
-        prop="value"
+        label="动作"
+        prop="click"
         min-width="100px"
         show-overflow-tooltip
       />
@@ -58,11 +58,11 @@
         ref="attributeFormRef"
         @submit.prevent
       >
-        <el-form-item label="属性名：" prop="label">
-          <el-input v-model="buttonForm.label" clearable />
+        <el-form-item label="名称：" prop="name">
+          <el-input v-model="buttonForm.name" clearable />
         </el-form-item>
-        <el-form-item label="属性值：" prop="value">
-          <el-input v-model="buttonForm.value" clearable />
+        <el-form-item label="动作：" prop="click">
+          <el-input v-model="buttonForm.click" clearable />
         </el-form-item>
       </el-form>
       <template v-slot:footer>
@@ -164,23 +164,26 @@ export default {
         .catch(() => console.info('操作取消'))
     },
     saveAttribute() {
-      const { name, value } = this.buttonForm
-      console.log(this.bpmnElementButtonList)
+      const { name, click } = this.buttonForm
       if (this.editingPropertyIndex !== -1) {
         modelerStore.modeling.updateModdleProperties(
           this.bpmnElement,
           this.bpmnElementButtonList[this.editingPropertyIndex],
           {
-            name,
-            value,
+            'name': name,
+            'flowable:click': click,
           }
         )
       } else {
         // 新建属性字段
         const newPropertyObject = modelerStore.moddle.create(
-          `flowable:Button`,
-          { name, value }
+          'flowable:Button',
+          {
+            'name': name,
+            'flowable:click': click,
+          }
         )
+        alert(JSON.stringify(newPropertyObject))
         // 新建一个属性字段的保存列表
         const propertiesObject = modelerStore.moddle.create(
           `flowable:Buttons`,
@@ -188,6 +191,7 @@ export default {
             values: this.bpmnElementButtonList.concat([newPropertyObject]),
           }
         )
+
         this.updateElementExtensions(propertiesObject)
       }
       this.buttonFormModelVisible = false

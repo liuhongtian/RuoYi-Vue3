@@ -4,30 +4,21 @@
       <template v-slot:header>
         <div class="clearfix">
           <span class="el-icon-document">待办任务</span>
-          <el-tag style="margin-left: 10px">发起人:{{ startUser }}</el-tag>
-          <el-tag>任务节点:{{ taskName }}</el-tag>
-          <el-button
-            style="float: right"
-            size="small"
-            type="danger"
-            @click="goBack"
-            >关闭</el-button
-          >
+          <el-tag style="margin-left: 10px">发起人: {{ startUser }}</el-tag>
+          <el-tag>任务节点: {{ taskName }}</el-tag>
+          <el-button style="float: right" size="small" type="danger" @click="goBack">关闭</el-button>
         </div>
       </template>
-      <el-tabs
-        tab-position="top"
-        v-model="activeName"
-        @tab-click="handleClick"
-      >
+      <el-tabs tab-position="top" v-model="activeName" @tab-click="handleClick">
         <!--表单信息-->
         <el-tab-pane label="表单信息" name="1">
           <el-col :span="16" :offset="4">
             <v-form-render ref="vFormRef" />
+            <hr />
             <div style="margin-left: 10%; margin-bottom: 20px; font-size: 14px">
-              <el-button type="primary" @click="handleComplete"
-                >审 批</el-button
-              >
+              <el-button type="primary" @click="handleComplete">通 过</el-button>
+              <el-button type="primary" @click="handleReturn">退 回</el-button>
+              <el-button type="primary" @click="handleReject">驳 回</el-button>
             </div>
           </el-col>
         </el-tab-pane>
@@ -38,72 +29,36 @@
           <el-col :span="16" :offset="4">
             <div class="block">
               <el-timeline>
-                <el-timeline-item
-                  v-for="(item, index) in flowRecordList"
-                  :key="index"
-                  :icon="setIcon(item.finishTime)"
-                  :color="setColor(item.finishTime)"
-                >
+                <el-timeline-item v-for="(item, index) in flowRecordList" :key="index" :icon="setIcon(item.finishTime)"
+                  :color="setColor(item.finishTime)">
                   <p style="font-weight: 700">{{ item.taskName }}</p>
                   <el-card :body-style="{ padding: '10px' }">
-                    <el-descriptions
-                      class="margin-top"
-                      :column="1"
-                      size="small"
-                      border
-                    >
-                      <el-descriptions-item
-                        v-if="item.assigneeName"
-                        label-class-name="my-label"
-                      >
-                        <template v-slot:label
-                          ><i class="el-icon-user"></i>办理人</template
-                        >
+                    <el-descriptions class="margin-top" :column="1" size="small" border>
+                      <el-descriptions-item v-if="item.assigneeName" label-class-name="my-label">
+                        <template v-slot:label><i class="el-icon-user"></i>办理人</template>
                         {{ item.assigneeName }}
                         <el-tag type="info" size="small">{{
                           item.deptName
-                        }}</el-tag>
+                          }}</el-tag>
                       </el-descriptions-item>
-                      <el-descriptions-item
-                        v-if="item.candidate"
-                        label-class-name="my-label"
-                      >
-                        <template v-slot:label
-                          ><i class="el-icon-user"></i>候选办理</template
-                        >
+                      <el-descriptions-item v-if="item.candidate" label-class-name="my-label">
+                        <template v-slot:label><i class="el-icon-user"></i>候选办理</template>
                         {{ item.candidate }}
                       </el-descriptions-item>
                       <el-descriptions-item label-class-name="my-label">
-                        <template v-slot:label
-                          ><i class="el-icon-date"></i>接收时间</template
-                        >
+                        <template v-slot:label><i class="el-icon-date"></i>接收时间</template>
                         {{ item.createTime }}
                       </el-descriptions-item>
-                      <el-descriptions-item
-                        v-if="item.finishTime"
-                        label-class-name="my-label"
-                      >
-                        <template v-slot:label
-                          ><i class="el-icon-date"></i>处理时间</template
-                        >
+                      <el-descriptions-item v-if="item.finishTime" label-class-name="my-label">
+                        <template v-slot:label><i class="el-icon-date"></i>处理时间</template>
                         {{ item.finishTime }}
                       </el-descriptions-item>
-                      <el-descriptions-item
-                        v-if="item.duration"
-                        label-class-name="my-label"
-                      >
-                        <template v-slot:label
-                          ><i class="el-icon-time"></i>耗时</template
-                        >
+                      <el-descriptions-item v-if="item.duration" label-class-name="my-label">
+                        <template v-slot:label><i class="el-icon-time"></i>耗时</template>
                         {{ item.duration }}
                       </el-descriptions-item>
-                      <el-descriptions-item
-                        v-if="item.comment"
-                        label-class-name="my-label"
-                      >
-                        <template v-slot:label
-                          ><i class="el-icon-tickets"></i>处理意见</template
-                        >
+                      <el-descriptions-item v-if="item.comment" label-class-name="my-label">
+                        <template v-slot:label><i class="el-icon-tickets"></i>处理意见</template>
                         {{ item.comment.comment }}
                       </el-descriptions-item>
                     </el-descriptions>
@@ -119,37 +74,16 @@
         </el-tab-pane>
       </el-tabs>
       <!--审批任务-->
-      <el-dialog
-        :title="completeTitle"
-        v-model="completeOpen"
-        width="60%"
-        append-to-body
-      >
+      <el-dialog :title="completeTitle" v-model="completeOpen" width="60%" append-to-body>
         <el-form ref="taskForm" :model="taskForm">
           <el-form-item prop="targetKey">
-            <flow-user
-              v-if="checkSendUser"
-              :checkType="checkType"
-              @handleUserSelect="handleUserSelect"
-            ></flow-user>
-            <flow-role
-              v-if="checkSendRole"
-              @handleRoleSelect="handleRoleSelect"
-            ></flow-role>
+            <flow-user v-if="checkSendUser" :checkType="checkType" @handleUserSelect="handleUserSelect"></flow-user>
+            <flow-role v-if="checkSendRole" @handleRoleSelect="handleRoleSelect"></flow-role>
           </el-form-item>
-          <el-form-item
-            label="处理意见"
-            label-width="80px"
-            prop="comment"
-            :rules="[
-              { required: true, message: '请输入处理意见', trigger: 'blur' },
-            ]"
-          >
-            <el-input
-              type="textarea"
-              v-model="taskForm.comment"
-              placeholder="请输入处理意见"
-            />
+          <el-form-item label="处理意见" label-width="80px" prop="comment" :rules="[
+            { required: true, message: '请输入处理意见', trigger: 'blur' },
+          ]">
+            <el-input type="textarea" v-model="taskForm.comment" placeholder="请输入处理意见" />
           </el-form-item>
         </el-form>
         <template v-slot:footer>
@@ -160,36 +94,18 @@
         </template>
       </el-dialog>
       <!--退回流程-->
-      <el-dialog
-        :title="returnTitle"
-        v-model="returnOpen"
-        width="40%"
-        append-to-body
-      >
+      <el-dialog :title="returnTitle" v-model="returnOpen" width="40%" append-to-body>
         <el-form ref="taskForm" :model="taskForm" label-width="80px">
           <el-form-item label="退回节点" prop="targetKey">
             <el-radio-group v-model="taskForm.targetKey">
-              <el-radio-button
-                v-for="item in returnTaskList"
-                :key="item.id"
-                :label="item.id"
-                >{{ item.name }}
+              <el-radio-button v-for="item in returnTaskList" :key="item.id" :label="item.id">{{ item.name }}
               </el-radio-button>
             </el-radio-group>
           </el-form-item>
-          <el-form-item
-            label="退回意见"
-            prop="comment"
-            :rules="[
-              { required: true, message: '请输入意见', trigger: 'blur' },
-            ]"
-          >
-            <el-input
-              style="width: 50%"
-              type="textarea"
-              v-model="taskForm.comment"
-              placeholder="请输入意见"
-            />
+          <el-form-item label="退回意见" prop="comment" :rules="[
+            { required: true, message: '请输入意见', trigger: 'blur' },
+          ]">
+            <el-input style="width: 50%" type="textarea" v-model="taskForm.comment" placeholder="请输入意见" />
           </el-form-item>
         </el-form>
         <template v-slot:footer>
@@ -200,26 +116,12 @@
         </template>
       </el-dialog>
       <!--驳回流程-->
-      <el-dialog
-        :title="rejectTitle"
-        v-model="rejectOpen"
-        width="40%"
-        append-to-body
-      >
+      <el-dialog :title="rejectTitle" v-model="rejectOpen" width="40%" append-to-body>
         <el-form ref="taskForm" :model="taskForm" label-width="80px">
-          <el-form-item
-            label="驳回意见"
-            prop="comment"
-            :rules="[
-              { required: true, message: '请输入意见', trigger: 'blur' },
-            ]"
-          >
-            <el-input
-              style="width: 50%"
-              type="textarea"
-              v-model="taskForm.comment"
-              placeholder="请输入意见"
-            />
+          <el-form-item label="驳回意见" prop="comment" :rules="[
+            { required: true, message: '请输入意见', trigger: 'blur' },
+          ]">
+            <el-input style="width: 50%" type="textarea" v-model="taskForm.comment" placeholder="请输入意见" />
           </el-form-item>
         </el-form>
         <template v-slot:footer>
@@ -401,7 +303,7 @@ export default {
       this.taskForm.delegateTaskShow = true
       this.taskForm.defaultTaskShow = false
     },
-    handleAssign() {},
+    handleAssign() { },
     /** 返回页面 */
     goBack() {
       // 关闭当前标签页并返回上个页面
@@ -552,21 +454,26 @@ export default {
   width: 800px;
   padding: 15px;
 }
+
 .clearfix:before,
 .clearfix:after {
   display: table;
   content: '';
 }
+
 .clearfix:after {
   clear: both;
 }
+
 .box-card {
   width: 100%;
   margin-bottom: 20px;
 }
-.el-tag + .el-tag {
+
+.el-tag+.el-tag {
   margin-left: 10px;
 }
+
 .my-label {
   background: #e1f3d8;
 }

@@ -83,7 +83,7 @@
             <el-button
               size="small"
               type="primary"
-              icon="el-icon-user"
+              icon="User"
               @click="multipleUserCheck"
             />
           </el-tooltip>
@@ -97,7 +97,7 @@
             <el-button
               size="small"
               type="warning"
-              icon="el-icon-postcard"
+              icon="Postcard"
               @click="singleExpCheck"
             />
           </el-tooltip>
@@ -120,7 +120,7 @@
             <el-button
               size="small"
               type="primary"
-              icon="el-icon-user"
+              icon="User"
               @click="multipleRoleCheck"
             />
           </el-tooltip>
@@ -134,7 +134,7 @@
             <el-button
               size="small"
               type="warning"
-              icon="el-icon-postcard"
+              icon="Postcard"
               @click="singleExpCheck"
             />
           </el-tooltip>
