@@ -19,10 +19,10 @@
         </el-collapse-item>
 
         <!--   按钮     -->
-        <el-collapse-item name="buttons" v-if="elementType === 'UserTask'">
+        <!--el-collapse-item name="buttons" v-if="elementType === 'UserTask'">
           <template v-slot:title><el-icon><Platform /></el-icon> 按钮配置</template>
           <buttons-panel :id="elementId"/>
-        </el-collapse-item>
+        </el-collapse-item-->
 
         <!--   表单     -->
         <el-collapse-item name="form" v-if="formVisible">
