@@ -1,11 +1,21 @@
+<style lang="scss" scoped>
+body {
+  margin: 0 !important;
+}
+
+.el-container.main-container {
+  background: #fff;
+  margin-left: 0 !important;
+}
+</style>
+
 <template>
   <div>
     <v-form-designer ref="vfDesigner" :designer-config="designerConfig">
-      <!-- 保存按钮 -->
-      <el-button type="text" @click="saveFormJson"><i class="el-icon-s-promotion" />保存</el-button>
-      <template>
+      <template #customToolButtons>
+        <!-- 保存按钮 -->
+        <el-button type="text" @click="saveFormJson" icon="FirstAidKit" style="color: green;">保存</el-button>
       </template>
-
     </v-form-designer>
 
     <!--系统表单信息-->
@@ -147,14 +157,3 @@ onMounted(() => {
 })
 
 </script>
-
-<style lang="scss" scoped>
-body {
-  margin: 0;
-}
-
-.el-container.main-container {
-  background: #fff;
-  margin-left: 0 !important;
-}
-</style>
