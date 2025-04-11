@@ -137,7 +137,7 @@
 </template>
 
 <script setup name="Task">
-import { listTask, getTask, delTask, addTask, updateTask } from "@/api/system/task";
+import { listTask, getTask, delTask, addTask, updateTask } from "@/api/temp/task";
 import { ref, reactive, toRefs, onMounted, nextTick } from 'vue';
 
 const { proxy } = getCurrentInstance();
