@@ -1,3 +1,9 @@
+<style>
+.no-padding-column .cell {
+  padding-left: 0;
+  padding-right: 0;
+}
+</style>
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
@@ -158,40 +164,40 @@
           <dict-tag :options="task_schedule_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="采样状态" align="center">       
+      <el-table-column label="采样状态" align="center" class-name="no-padding-column">       
         <template #default="scope">
           <div v-if="scope.row.clockIn">
-            <div v-if="scope.row.ypfxTime" width="100%" class="bg-green">采样</div>
-            <div v-else width="100%" class="bg-blue">采样</div>
+            <div v-if="scope.row.ypfxTime" class="bg-green">采样</div>
+            <div v-else class="bg-blue">采样</div>
           </div>
-          <div v-else class="bg-gray">采样</div>
+          <div v-else class="bg-white">采样</div>
         </template>
       </el-table-column>
-      <el-table-column label="交接状态" align="center">       
+      <el-table-column label="交接状态" align="center" class-name="no-padding-column">       
         <template #default="scope">
           <div v-if="scope.row.ypfxTime">
             <div v-if="scope.row.actualSyTime" width="100%" class="bg-green">交接</div>
             <div v-else width="100%" class="bg-blue">交接</div>
           </div>
-          <div v-else class="bg-gray">交接</div>
+          <div v-else class="bg-white">交接</div>
         </template>
       </el-table-column>
-      <el-table-column label="运输状态" align="center">       
+      <el-table-column label="运输状态" align="center" class-name="no-padding-column">       
         <template #default="scope">
           <div v-if="scope.row.actualSyTime">
             <div v-if="scope.row.actualTestStationTime" width="100%" class="bg-green">运输</div>
             <div v-else width="100%" class="bg-blue">运输</div>
           </div>
-          <div v-else class="bg-gray">运输</div>
+          <div v-else class="bg-white">运输</div>
         </template>
       </el-table-column>
-      <el-table-column label="检测状态" align="center">       
+      <el-table-column label="检测状态" align="center" class-name="no-padding-column">       
         <template #default="scope">
           <div v-if="scope.row.actualTestStationTime">
             <div v-if="scope.row.testResultTime" width="100%" class="bg-green">检测</div>
             <div v-else width="100%" class="bg-blue">检测</div>
           </div>
-          <div v-else class="bg-gray">检测</div>
+          <div v-else class="bg-white">检测</div>
         </template>
       </el-table-column>
     </el-table>
