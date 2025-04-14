@@ -133,7 +133,7 @@
         <!-- 自定义按钮插槽演示 -->
         <template #customSaveButton>
           <el-button type="text" @click="saveFormJson"
-            ><i class="el-icon-s-promotion" />保存</el-button
+            ><el-icon><Promotion /></el-icon>保存</el-button
           >
         </template>
       </v-form-designer>

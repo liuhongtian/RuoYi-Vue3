@@ -38,7 +38,7 @@
                     <br />delete（删除）：在任务即将被删除前触发。请注意任务由completeTask正常完成时也会触发。
                   </div>
                 </template>
-                <i class="el-icon-question" />
+                <el-icon><QuestionFilled /></el-icon>
               </el-tooltip>
             </span>
           </template>
@@ -67,7 +67,7 @@
                     <br />delete（删除）：在任务即将被删除前触发。请注意任务由completeTask正常完成时也会触发。
                   </div>
                 </template>
-                <i class="el-icon-question" />
+                <el-icon><QuestionFilled /></el-icon>
               </el-tooltip>
             </span>
           </template>
@@ -146,7 +146,7 @@
 
       <el-divider />
       <p class="listener-filed__title">
-        <span><i class="el-icon-menu"></i>注入字段：</span>
+        <span><el-icon><Menu /></el-icon>注入字段：</span>
         <el-button size="small" type="primary" @click="openListenerFieldForm(null)">添加字段</el-button>
       </p>
       <el-table :data="fieldsListOfListener" size="small" max-height="240" border fit style="flex: none">

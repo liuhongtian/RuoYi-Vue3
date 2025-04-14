@@ -48,7 +48,7 @@
                         label-class-name="my-label"
                       >
                         <template v-slot:label
-                          ><i class="el-icon-user"></i>办理人</template
+                          ><el-icon><User /></el-icon>办理人</template
                         >
                         {{ item.assigneeName }}
                         <el-tag type="info" size="small">{{
@@ -60,13 +60,13 @@
                         label-class-name="my-label"
                       >
                         <template v-slot:label
-                          ><i class="el-icon-user"></i>候选办理</template
+                          ><el-icon><User /></el-icon>候选办理</template
                         >
                         {{ item.candidate }}
                       </el-descriptions-item>
                       <el-descriptions-item label-class-name="my-label">
                         <template v-slot:label
-                          ><i class="el-icon-date"></i>接收时间</template
+                          ><el-icon><Calendar /></el-icon>接收时间</template
                         >
                         {{ item.createTime }}
                       </el-descriptions-item>
@@ -75,7 +75,7 @@
                         label-class-name="my-label"
                       >
                         <template v-slot:label
-                          ><i class="el-icon-date"></i>处理时间</template
+                          ><el-icon><Calendar /></el-icon>处理时间</template
                         >
                         {{ item.finishTime }}
                       </el-descriptions-item>
@@ -84,7 +84,7 @@
                         label-class-name="my-label"
                       >
                         <template v-slot:label
-                          ><i class="el-icon-time"></i>耗时</template
+                          ><el-icon><Timer /></el-icon>耗时</template
                         >
                         {{ item.duration }}
                       </el-descriptions-item>
@@ -93,7 +93,7 @@
                         label-class-name="my-label"
                       >
                         <template v-slot:label
-                          ><i class="el-icon-tickets"></i>处理意见</template
+                          ><el-icon><Tickets /></el-icon>处理意见</template
                         >
                         {{ item.comment.comment }}
                       </el-descriptions-item>

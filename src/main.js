@@ -43,8 +43,8 @@ import ImagePreview from "@/components/ImagePreview"
 // 字典标签组件
 import DictTag from '@/components/DictTag'
 
-import 'vform3-builds/dist/designer.style.css'  //引入VForm3样式
 import VForm3 from 'vform3-builds'  //引入VForm 3库
+import 'vform3-builds/dist/designer.style.css'  //引入VForm3样式
 
 import modelerStore from '@/components/Process/common/global'
 
@@ -71,9 +71,6 @@ app.component('ImagePreview', ImagePreview)
 app.component('RightToolbar', RightToolbar)
 app.component('Editor', Editor)
 
-//同时注册了v-form-designer、v-form-render等组件
-app.use(VForm3)
-
 app.use(router)
 app.use(store)
 app.use(plugins)
@@ -88,5 +85,7 @@ app.use(ElementPlus, {
   // 支持 large、default、small
   size: Cookies.get('size') || 'default'
 })
+
+app.use(VForm3)
 
 app.mount('#app')

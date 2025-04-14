@@ -184,7 +184,7 @@
                         <template #append>
                            <el-button type="primary" @click="handleShowCron">
                               生成表达式
-                              <i class="el-icon-time el-icon--right"></i>
+                              <el-icon><Timer /></el-icon><el-icon><Right /></el-icon>
                            </el-button>
                         </template>
                      </el-input>

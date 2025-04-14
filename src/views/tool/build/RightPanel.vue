@@ -220,7 +220,7 @@
               <template #item="{ element, index }">
                 <div :key="index" class="select-item">
                   <div class="select-line-icon option-drag">
-                    <i class="el-icon-s-operation" />
+                    <el-icon><Operation /></el-icon>
                   </div>
                   <el-input v-model="element.label" placeholder="选项名" size="small" />
                   <el-input placeholder="选项值" size="small" :value="element.value"

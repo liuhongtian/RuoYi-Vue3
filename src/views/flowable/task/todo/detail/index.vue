@@ -35,30 +35,30 @@
                   <el-card :body-style="{ padding: '10px' }">
                     <el-descriptions class="margin-top" :column="1" size="small" border>
                       <el-descriptions-item v-if="item.assigneeName" label-class-name="my-label">
-                        <template v-slot:label><i class="el-icon-user"></i>办理人</template>
+                        <template v-slot:label><el-icon><User /></el-icon>办理人</template>
                         {{ item.assigneeName }}
                         <el-tag type="info" size="small">{{
                           item.deptName
                           }}</el-tag>
                       </el-descriptions-item>
                       <el-descriptions-item v-if="item.candidate" label-class-name="my-label">
-                        <template v-slot:label><i class="el-icon-user"></i>候选办理</template>
+                        <template v-slot:label><el-icon><User /></el-icon>候选办理</template>
                         {{ item.candidate }}
                       </el-descriptions-item>
                       <el-descriptions-item label-class-name="my-label">
-                        <template v-slot:label><i class="el-icon-date"></i>接收时间</template>
+                        <template v-slot:label><el-icon><Calendar /></el-icon>接收时间</template>
                         {{ item.createTime }}
                       </el-descriptions-item>
                       <el-descriptions-item v-if="item.finishTime" label-class-name="my-label">
-                        <template v-slot:label><i class="el-icon-date"></i>处理时间</template>
+                        <template v-slot:label><el-icon><Calendar /></el-icon>处理时间</template>
                         {{ item.finishTime }}
                       </el-descriptions-item>
                       <el-descriptions-item v-if="item.duration" label-class-name="my-label">
-                        <template v-slot:label><i class="el-icon-time"></i>耗时</template>
+                        <template v-slot:label><el-icon><Timer /></el-icon>耗时</template>
                         {{ item.duration }}
                       </el-descriptions-item>
                       <el-descriptions-item v-if="item.comment" label-class-name="my-label">
-                        <template v-slot:label><i class="el-icon-tickets"></i>处理意见</template>
+                        <template v-slot:label><el-icon><Tickets /></el-icon>处理意见</template>
                         {{ item.comment.comment }}
                       </el-descriptions-item>
                     </el-descriptions>

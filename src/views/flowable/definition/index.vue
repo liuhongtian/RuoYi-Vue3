@@ -1,82 +1,32 @@
 <template>
   <div class="app-container">
-    <el-form
-      :model="queryParams"
-      ref="queryForm"
-      :inline="true"
-      v-show="showSearch"
-      label-width="68px"
-    >
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="名称" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入名称"
-          clearable
-          size="small"
-          @keyup.enter="handleQuery"
-        />
+        <el-input v-model="queryParams.name" placeholder="请输入名称" clearable size="small" @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="开始时间" prop="deployTime">
-        <el-date-picker
-          clearable
-          size="small"
-          v-model="queryParams.deployTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择时间"
-        >
+        <el-date-picker clearable size="small" v-model="queryParams.deployTime" type="date" value-format="yyyy-MM-dd"
+          placeholder="选择时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          size="small"
-          @click="handleQuery"
-          >搜索</el-button
-        >
-        <el-button icon="el-icon-refresh" size="small" @click="resetQuery"
-          >重置</el-button
-        >
+        <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <!--      <el-col :span="1.5">-->
-      <!--        <el-button-->
-      <!--          type="primary"-->
-      <!--          plain-->
-      <!--          icon="el-icon-upload"-->
-      <!--          size="small"-->
-      <!--          @click="handleImport"-->
-      <!--        >导入</el-button>-->
-      <!--      </el-col>-->
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-plus"
-          size="small"
-          @click="handleLoadXml"
-          >新增</el-button
-        >
+        <el-button type="success" plain size="small" @click="handleLoadXml"><el-icon><Plus /></el-icon>新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="small"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:deployment:remove']"
-          >删除</el-button
-        >
+        <el-button type="primary" plain size="small" @click="handleImport"><el-icon><Upload /></el-icon>导入</el-button>
       </el-col>
-      <right-toolbar
-        v-model:showSearch="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
+      <el-col :span="1.5">
+        <el-button type="danger" plain size="small" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['system:deployment:remove']"><el-icon><Delete /></el-icon>删除</el-button>
+      </el-col>
+      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
     <el-alert title="流程设计说明" type="success">
       <template v-slot:title>
@@ -93,53 +43,21 @@
         </div>
       </template>
     </el-alert>
-    <el-table
-      v-loading="loading"
-      fit
-      :data="definitionList"
-      border
-      @selection-change="handleSelectionChange"
-    >
+    <el-table v-loading="loading" fit :data="definitionList" border @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column
-        label="流程编号"
-        align="center"
-        prop="deploymentId"
-        :show-overflow-tooltip="true"
-      />
-      <el-table-column
-        label="流程标识"
-        align="center"
-        prop="flowKey"
-        :show-overflow-tooltip="true"
-      />
+      <el-table-column label="流程编号" align="center" prop="deploymentId" :show-overflow-tooltip="true" />
+      <el-table-column label="流程标识" align="center" prop="flowKey" :show-overflow-tooltip="true" />
       <el-table-column label="流程分类" align="center" prop="category" />
-      <el-table-column
-        label="流程名称"
-        align="center"
-        width="120"
-        :show-overflow-tooltip="true"
-      >
+      <el-table-column label="流程名称" align="center" width="120" :show-overflow-tooltip="true">
         <template v-slot="scope">
-          <el-button
-            type="text"
-            @click="handleReadImage(scope.row.deploymentId)"
-          >
+          <el-button type="text" @click="handleReadImage(scope.row.deploymentId)">
             <span>{{ scope.row.name }}</span>
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column
-        label="业务表单"
-        align="center"
-        :show-overflow-tooltip="true"
-      >
+      <el-table-column label="业务表单" align="center" :show-overflow-tooltip="true">
         <template v-slot="scope">
-          <el-button
-            v-if="scope.row.formId"
-            type="text"
-            @click="handleForm(scope.row.formId)"
-          >
+          <el-button v-if="scope.row.formId" type="text" @click="handleForm(scope.row.formId)">
             <span>{{ scope.row.formName }}</span>
           </el-button>
           <label v-else>暂无表单</label>
@@ -152,85 +70,32 @@
       </el-table-column>
       <el-table-column label="状态" align="center">
         <template v-slot="scope">
-          <el-tag type="success" v-if="scope.row.suspensionState === 1"
-            >激活</el-tag
-          >
-          <el-tag type="warning" v-if="scope.row.suspensionState === 2"
-            >挂起</el-tag
-          >
+          <el-tag type="success" v-if="scope.row.suspensionState === 1">激活</el-tag>
+          <el-tag type="warning" v-if="scope.row.suspensionState === 2">挂起</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        label="部署时间"
-        align="center"
-        prop="deploymentTime"
-        width="180"
-      />
-      <el-table-column
-        label="操作"
-        width="250"
-        fixed="right"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="部署时间" align="center" prop="deploymentTime" width="180" />
+      <el-table-column label="操作" width="250" fixed="right" class-name="small-padding fixed-width">
         <template v-slot="scope">
-          <el-button
-            @click="handleLoadXml(scope.row)"
-            icon="el-icon-edit-outline"
-            type="text"
-            size="small"
-            >设计</el-button
-          >
-          <el-button
-            @click="handleAddForm(scope.row)"
-            icon="el-icon-edit-el-icon-s-promotion"
-            type="text"
-            size="small"
-            v-if="scope.row.formId == null"
-            >配置主表单</el-button
-          >
-          <el-button
-            @click="handleUpdateSuspensionState(scope.row)"
-            icon="el-icon-video-pause"
-            type="text"
-            size="small"
-            v-if="scope.row.suspensionState === 1"
-            >挂起</el-button
-          >
-          <el-button
-            @click="handleUpdateSuspensionState(scope.row)"
-            icon="el-icon-video-play"
-            type="text"
-            size="small"
-            v-if="scope.row.suspensionState === 2"
-            >激活</el-button
-          >
-          <el-button
-            @click="handleDelete(scope.row)"
-            icon="el-icon-delete"
-            type="text"
-            size="small"
-            v-hasPermi="['system:deployment:remove']"
-            >删除</el-button
-          >
+          <el-button @click="handleLoadXml(scope.row)" type="text"
+            size="small"><el-icon><EditPen /></el-icon>设计</el-button>
+          <el-button @click="handleAddForm(scope.row)" type="text" size="small"
+            v-if="scope.row.formId == null"><el-icon><Edit /></el-icon>配置主表单</el-button>
+          <el-button @click="handleUpdateSuspensionState(scope.row)" type="text" size="small"
+            v-if="scope.row.suspensionState === 1"><el-icon><VideoPause /></el-icon>挂起</el-button>
+          <el-button @click="handleUpdateSuspensionState(scope.row)" type="text" size="small"
+            v-if="scope.row.suspensionState === 2"><el-icon><VideoPlay /></el-icon>激活</el-button>
+          <el-button @click="handleDelete(scope.row)" type="text" size="small"
+            v-hasPermi="['system:deployment:remove']"><el-icon><Delete /></el-icon>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize" @pagination="getList" />
 
     <!-- 添加或修改流程定义对话框 -->
-    <el-dialog
-      :title="title"
-      v-model="open"
-      width="500px"
-      append-to-body
-    >
+    <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="看看" prop="name">
           <el-input v-model="form.name" placeholder="请输入看看" />
@@ -245,27 +110,11 @@
     </el-dialog>
 
     <!-- bpmn20.xml导入对话框 -->
-    <el-dialog
-      :title="upload.title"
-      v-model="upload.open"
-      width="400px"
-      append-to-body
-    >
-      <el-upload
-        ref="upload"
-        :limit="1"
-        accept=".xml"
-        :headers="upload.headers"
-        :action="
-          upload.url + '?name=' + upload.name + '&category=' + upload.category
-        "
-        :disabled="upload.isUploading"
-        :on-progress="handleFileUploadProgress"
-        :on-success="handleFileSuccess"
-        :auto-upload="false"
-        drag
-      >
-        <i class="el-icon-upload"></i>
+    <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
+      <el-upload ref="upload" :limit="1" accept=".xml" :headers="upload.headers" :action="upload.url + '?name=' + upload.name + '&category=' + upload.category
+        " :disabled="upload.isUploading" :on-progress="handleFileUploadProgress" :on-success="handleFileSuccess"
+        :auto-upload="false" drag>
+        <el-icon><UploadFilled /></el-icon>
         <div class="el-upload__text">
           将文件拖到此处，或
           <em>点击上传</em>
@@ -276,16 +125,9 @@
             流程分类：
             <div>
               <!--          <el-input v-model="upload.category"/>-->
-              <el-select
-                v-model="upload.category"
-                placeholder="请选择流程分类"
-              >
-                <el-option
-                  v-for="dict in sys_process_category"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                ></el-option>
+              <el-select v-model="upload.category" placeholder="请选择流程分类">
+                <el-option v-for="dict in sys_process_category" :key="dict.value" :label="dict.label"
+                  :value="dict.value"></el-option>
               </el-select>
             </div>
           </div>
@@ -305,72 +147,36 @@
     </el-dialog>
 
     <!-- 流程图 -->
-    <el-dialog
-      :title="readImage.title"
-      v-model="readImage.open"
-      width="70%"
-      append-to-body
-    >
+    <el-dialog :title="readImage.title" v-model="readImage.open" width="70%" append-to-body>
       <!-- <el-image :src="readImage.src"></el-image> -->
       <bpmn-viewer :flowData="flowData" />
     </el-dialog>
 
     <!--表单配置详情-->
-    <el-dialog
-      :title="formTitle"
-      v-model="formConfOpen"
-      width="50%"
-      append-to-body
-    >
+    <el-dialog :title="formTitle" v-model="formConfOpen" width="50%" append-to-body>
       <div class="test-form">
         <v-form-render :form-data="formData" ref="vFormRef" />
       </div>
     </el-dialog>
 
     <!--挂载表单-->
-    <el-dialog
-      :title="formDeployTitle"
-      v-model="formDeployOpen"
-      width="60%"
-      append-to-body
-    >
+    <el-dialog :title="formDeployTitle" v-model="formDeployOpen" width="60%" append-to-body>
       <el-row :gutter="24">
         <el-col :span="10" :xs="24">
-          <el-table
-            ref="singleTable"
-            :data="formList"
-            border
-            highlight-current-row
-            @current-change="handleCurrentChange"
-            style="width: 100%"
-          >
+          <el-table ref="singleTable" :data="formList" border highlight-current-row
+            @current-change="handleCurrentChange" style="width: 100%">
             <el-table-column label="表单编号" align="center" prop="formId" />
             <el-table-column label="表单名称" align="center" prop="formName" />
-            <el-table-column
-              label="操作"
-              align="center"
-              class-name="small-padding fixed-width"
-            >
+            <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
               <template v-slot="scope">
-                <el-button
-                  size="small"
-                  type="text"
-                  @click="submitFormDeploy(scope.row)"
-                  >确定</el-button
-                >
+                <el-button size="small" type="text" @click="submitFormDeploy(scope.row)">确定</el-button>
               </template>
             </el-table-column>
           </el-table>
 
-          <pagination
-            small
-            layout="prev, pager, next"
-            v-show="formTotal > 0"
-            :total="formTotal"
-            v-model:page="formQueryParams.pageNum"
-            v-model:limit="formQueryParams.pageSize"
-            @pagination="ListFormDeploy"
-          />
+          <pagination small layout="prev, pager, next" v-show="formTotal > 0" :total="formTotal"
+            v-model:page="formQueryParams.pageNum" v-model:limit="formQueryParams.pageSize"
+            @pagination="ListFormDeploy" />
         </el-col>
         <el-col :span="14" :xs="24">
           <div class="test-form">
@@ -497,7 +303,7 @@ export default {
       // 表单校验
       rules: {},
     }
-  }, 
+  },
   created() {
     this.sys_process_category = useDict('sys_process_category').sys_process_category;
     this.getList()
@@ -527,7 +333,7 @@ export default {
         .then(() => {
           done()
         })
-        .catch(() => {})
+        .catch(() => { })
     },
     // 取消按钮
     cancel() {
