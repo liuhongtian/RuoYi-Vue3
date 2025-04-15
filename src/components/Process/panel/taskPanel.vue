@@ -474,7 +474,6 @@ export default {
 
     // 用户选中数据 TODO: 后面更改为 点击确认按钮再赋值人员信息
     userSelect(selection) {
-      console.log('userSelect(selection): ', JSON.stringify(selection))
       if (selection) {
         this.deleteFlowAttar()
         this.updateCustomElement('dataType', 'fixed')
@@ -499,7 +498,6 @@ export default {
 
     // 角色选中数据
     roleSelect(selection, name) {
-      console.log('roleSelect(selection, name): ', JSON.stringify(selection), JSON.stringify(name))
       if (selection && name) {
         this.deleteFlowAttar()
         this.bpmnFormData[this.bpmnFormData.userType] = name
