@@ -504,7 +504,7 @@ export default {
         this.updateCustomElement('dataType', 'fixed')
         // userType = candidateGroups
         this.updateCustomElement(this.bpmnFormData.userType, selection)
-        this.handleSelectData(this.bpmnFormData.userType, selection.split(','))
+        this.handleSelectData(this.bpmnFormData.userType, selection)
       }
     },
 
