@@ -65,7 +65,7 @@
       </el-table-column>
       <el-table-column label="流程版本" align="center">
         <template v-slot="scope">
-          <el-tag size="medium">v{{ scope.row.version }}</el-tag>
+          <el-tag size="default">v{{ scope.row.version }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center">
