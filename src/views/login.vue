@@ -45,7 +45,7 @@
         <el-button
           :loading="loading"
           size="large"
-          type="primary"
+          type="success"
           style="width:100%;"
           @click.prevent="handleLogin"
         >
@@ -175,12 +175,13 @@ getCookie();
 .title {
   margin: 0px auto 30px auto;
   text-align: center;
-  color: #707070;
+  color: #042a03;
 }
 
 .login-form {
   border-radius: 6px;
-  background: #ffffff;
+  background: #a9cfae;
+  opacity: 0.88;
   width: 400px;
   padding: 25px 25px 5px 25px;
   .el-input {
@@ -216,7 +217,7 @@ getCookie();
   bottom: 0;
   width: 100%;
   text-align: center;
-  color: #fff;
+  color: #ffffff;
   font-family: Arial;
   font-size: 12px;
   letter-spacing: 1px;
