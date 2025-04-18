@@ -9,16 +9,16 @@ $yellow: #FEC171;
 $panGreen: #30B08F;
 
 // 默认主题变量
-$menuText: #bfcbd9;
-$menuActiveText: #409eff;
-$menuBg: #304156;
-$menuHover: #263445;
+$menuText: #ffffff;
+$menuActiveText: #585f56;
+$menuBg: #38623f;
+$menuHover: #0f1b0f;
 
 // 浅色主题theme-light
-$menuLightBg: #ffffff;
+$menuLightBg: #f0f5e4;
 $menuLightHover: #f0f1f5;
 $menuLightText: #303133;
-$menuLightActiveText: #409EFF;
+$menuLightActiveText: #155106;
 
 // 基础变量
 $base-sidebar-width: 200px;
@@ -28,11 +28,11 @@ $sideBarWidth: 200px;
 $base-menu-color: #bfcbd9;
 $base-menu-color-active: #f4f4f5;
 $base-menu-background: #304156;
-$base-sub-menu-background: #1f2d3d;
-$base-sub-menu-hover: #001528;
+$base-sub-menu-background: #288b3f;
+$base-sub-menu-hover: #255c2f;
 
 // 组件变量
-$--color-primary: #409EFF;
+$--color-primary: #2b5b8c;
 $--color-success: #67C23A;
 $--color-warning: #E6A23C;
 $--color-danger: #F56C6C;
@@ -83,7 +83,7 @@ $--color-info: #909399;
 // 暗黑模式变量
 html.dark {
   /* 默认通用 */
-  --el-bg-color: #141414;
+  --el-bg-color: #0b0a0a;
   --el-bg-color-overlay: #1d1e1f;
   --el-text-color-primary: #ffffff;
   --el-text-color-regular: #d0d0d0;
