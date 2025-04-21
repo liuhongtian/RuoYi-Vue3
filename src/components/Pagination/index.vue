@@ -96,7 +96,7 @@ function handleCurrentChange(val) {
 
 <style scoped>
 .pagination-container {
-  background: #fff;
+  background: #b5c3b9;
 }
 .pagination-container.hidden {
   display: none;

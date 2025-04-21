@@ -149,6 +149,8 @@ watch(searchPool, (list) => {
 <style lang='scss' scoped>
 .header-search {
   font-size: 0 !important;
+  color: #207724;
+  background-color: #e0ece2;
 
   .search-icon {
     cursor: pointer;
