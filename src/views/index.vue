@@ -1,8 +1,15 @@
-<!-- 监测站点地图展示 -->
+<!-- 测站地图展示 -->
 <template>
   <div class="app-container">
     <div class="map-container">
       <div id="baiduMap" style="width: 100%; height: 800px;"></div>
+    </div>
+    <div class="marker-selector">
+      <el-select v-model="selectedMarker" placeholder="请选择地图显示信息" @change="initBMap">
+        <el-option :key="1" label="测站" :value="1"></el-option>
+        <el-option :key="2" label="河流断面" :value="2"></el-option>
+        <el-option :key="3" label="国控站点" :value="3"></el-option>
+      </el-select>
     </div>
   </div>
 </template>
@@ -10,6 +17,8 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { listMonitorStationAll } from '@/api/obd/MonitorStation'
+import { listRiverSectionAll } from '@/api/obd/RiverSection'
+import { listStateControlledStationAll } from '@/api/obd/StateControlledStation'
 import iconUrlGreen from '@/assets/icons/32_1743400759.png'
 import iconUrlRed from '@/assets/icons/32_1743400919.png'
 
@@ -38,7 +47,11 @@ const aipartner = () => {
   });
 }
 
-const sites = ref([])
+const selectedMarker = ref(1)
+
+const monitorStations = ref([])
+const riverSections = ref([])
+const stateControlledStations = ref([])
 let map = null
 
 // 初始化百度地图
@@ -62,18 +75,26 @@ const initBMap = () => {
   map.addControl(new BMap.OverviewMapControl())    // 添加缩略地图控件
   map.addControl(new BMap.MapTypeControl())        // 添加地图类型控件
 
-  // 加载监测站点数据
-  loadSiteMarkers()
+  if (selectedMarker.value === 1) {
+    // 加载测站数据
+    loadMonitorStationMarkers()
+  } else if (selectedMarker.value === 2) {
+    // 加载河流断面数据
+    loadRiverSectionMarkers()
+  } else if (selectedMarker.value === 3) {
+    // 加载国控站点数据
+    loadStateControlledStationMarkers()
+  }
 }
 
-// 加载监测站点标记
-const loadSiteMarkers = async () => {
+// 加载测站标记
+const loadMonitorStationMarkers = async () => {
   try {
     const res = await listMonitorStationAll()
     if (res.code === 200) {
-      sites.value = res.rows
+      monitorStations.value = res.rows
       // 添加站点标记
-      sites.value.filter(site => site.longitude && site.latitude).forEach(site => {
+      monitorStations.value.filter(site => site.longitude && site.latitude).forEach(site => {
         // 创建标记点
         const marker = site.status === '1' ? new BMap.Marker(new BMap.Point(site.longitude, site.latitude), {
           title: site.stationName, icon: new BMap.Icon(iconUrlGreen, new BMap.Size(23, 25), {
@@ -93,6 +114,7 @@ const loadSiteMarkers = async () => {
             <p><span>站点编号：</span>${site.stationCode}</p>
             <p><span>站点名称：</span>${site.stationName}</p>
             <p><span>站点地址：</span>${site.address}</p>
+            <p><span>站点状态：</span>${site.status === '1' ? '<span style="color: green;">正常</span>' : '<span style="color: red;">停运</span>'}</p>
           </div>
         `)
 
@@ -104,6 +126,86 @@ const loadSiteMarkers = async () => {
     }
   } catch (error) {
     console.error('加载测站数据失败:', error)
+  }
+}
+
+// 加载河流断面标记
+const loadRiverSectionMarkers = async () => {
+  try {
+    const res = await listRiverSectionAll()
+    if (res.code === 200) {
+      riverSections.value = res.rows
+      // 添加站点标记
+      riverSections.value.filter(site => site.longitude && site.latitude).forEach(site => {
+        // 创建标记点
+        const marker = new BMap.Marker(new BMap.Point(site.longitude, site.latitude), {
+          title: site.sectionName, icon: new BMap.Icon(iconUrlGreen, new BMap.Size(23, 25), {
+            anchor: new BMap.Size(10, 20)
+          })
+        })
+        map.addOverlay(marker)
+
+        // 创建信息窗口
+        const infoWindow = new BMap.InfoWindow(`
+          <div class="site-info">
+            <h4>${site.sectionName}</h4>
+            <p><span>断面编号：</span>${site.sectionCode}</p>
+            <p><span>断面名称：</span>${site.sectionName}</p>
+            <p><span>所在流域：</span>${site.drainageBasin}</p>
+            <p><span>所在水体：</span>${site.waterBody}</p>
+          </div>
+        `)
+
+        // 点击标记点时打开信息窗口
+        marker.addEventListener('click', () => {
+          map.openInfoWindow(infoWindow, new BMap.Point(site.longitude, site.latitude))
+        })
+      })
+    }
+  } catch (error) {
+    console.error('加载河流断面数据失败:', error)
+  }
+}
+
+// 加载国控站点标记
+const loadStateControlledStationMarkers = async () => {
+  try {
+    const res = await listStateControlledStationAll()
+    if (res.code === 200) {
+      stateControlledStations.value = res.rows
+      // 添加站点标记
+      stateControlledStations.value.filter(site => site.longitude && site.latitude).forEach(site => {
+        // 创建标记点
+        const marker = site.status === 1 ? new BMap.Marker(new BMap.Point(site.longitude, site.latitude), {
+          title: site.stationName, icon: new BMap.Icon(iconUrlGreen, new BMap.Size(23, 25), {
+            anchor: new BMap.Size(10, 20)
+          })
+        }) : new BMap.Marker(new BMap.Point(site.longitude, site.latitude), {
+          title: site.stationName, icon: new BMap.Icon(iconUrlRed, new BMap.Size(23, 25), {
+            anchor: new BMap.Size(10, 20)
+          })
+        })
+        map.addOverlay(marker)
+
+        // 创建信息窗口
+        const infoWindow = new BMap.InfoWindow(`
+          <div class="site-info">
+            <h4>${site.stationName}</h4>
+            <p><span>站点编号：</span>${site.stationCode}</p>
+            <p><span>站点名称：</span>${site.stationName}</p>
+            <p><span>站点地址：</span>${site.address}</p>
+            <p><span>站点状态：</span>${site.status === 1 ? '<span style="color: green;">正常</span>' : '<span style="color: red;">停运</span>'}</p>
+          </div>
+        `)
+
+        // 点击标记点时打开信息窗口
+        marker.addEventListener('click', () => {
+          map.openInfoWindow(infoWindow, new BMap.Point(site.longitude, site.latitude))
+        })
+      })
+    }
+  } catch (error) {
+    console.error('加载国控站点数据失败:', error)
   }
 }
 
@@ -137,22 +239,58 @@ onMounted(() => {
 }
 
 :deep(.site-info) {
-  padding: 10px;
+
+  padding: 18px;
+
+  border-radius: 15px;
+  background: #c3d697;
+  width: 400px;
+  height: 125px;
 
   h4 {
     margin: 0 0 10px 0;
     font-size: 16px;
-    color: #303133;
+    color: #06300b;
   }
 
   p {
     margin: 5px 0;
     font-size: 14px;
-    color: #606266;
+    color: #0c6a1f;
 
     span {
-      color: #909399;
+      color: #0c6a1f;
     }
   }
+}
+
+.marker-selector {
+  position: fixed;
+  padding: 10px;
+  bottom: 40px;
+  right: 100px;
+  width: 200px;
+  height: 50px;
+  border-radius: 5px;
+  /* 圆形按钮 */
+  background-color: rgba(213, 213, 213, 0.89);
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 1000;
+
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  /* 使背景半透明 */
+  backdrop-filter: blur(10px);
+  /* 添加毛玻璃效果 */
+  flex-direction: column;
+  overflow: hidden;
+  resize: none;
 }
 </style>
