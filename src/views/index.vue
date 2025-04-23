@@ -6,11 +6,20 @@
     </div>
     <div class="marker-selector">
       <el-select v-model="selectedMarker" placeholder="请选择地图显示信息" @change="initBMap">
-        <el-option :key="1" label="测站" :value="1"></el-option>
-        <el-option :key="2" label="河流断面" :value="2"></el-option>
-        <el-option :key="3" label="国控站点" :value="3"></el-option>
+        <el-option :key="1" label="测站" :value="1"><el-icon>
+            <Monitor />
+          </el-icon>测站</el-option>
+        <el-option :key="2" label="河流断面" :value="2"><el-icon>
+            <Switch />
+          </el-icon>河流断面</el-option>
+        <el-option :key="3" label="国控站点" :value="3"><el-icon>
+            <DataAnalysis />
+          </el-icon>国控站点</el-option>
       </el-select>
     </div>
+    <div class="grafana-panel"><iframe
+        src="http://www.liuhongtian.com:3000/d-solo/cejr9sxk8jpj4a/e9a696-e9a1b5-e79c8b-e69dbf?orgId=1&from=1730419200000&to=1732838400000&timezone=browser&showCategory=Axis&theme=light&panelId=1&__feature.dashboardSceneSolo"
+        width="450" height="200" frameborder="0"></iframe></div>
   </div>
 </template>
 
@@ -271,6 +280,36 @@ onMounted(() => {
   right: 100px;
   width: 200px;
   height: 50px;
+  border-radius: 5px;
+  /* 圆形按钮 */
+  background-color: rgba(213, 213, 213, 0.89);
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 1000;
+
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  /* 使背景半透明 */
+  backdrop-filter: blur(10px);
+  /* 添加毛玻璃效果 */
+  flex-direction: column;
+  overflow: hidden;
+  resize: none;
+}
+
+.grafana-panel {
+  position: fixed;
+  padding: 10px;
+  bottom: 80px;
+  left:300px;
+  width: 450px;
+  height: 200px;
   border-radius: 5px;
   /* 圆形按钮 */
   background-color: rgba(213, 213, 213, 0.89);
