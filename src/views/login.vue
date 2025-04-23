@@ -169,7 +169,7 @@ getCookie();
 
 .left-top {
   position: absolute;
-  top: 150px;
+  top: 100px;
   left: 100px;
   padding: 10px;
 }
