@@ -17,7 +17,8 @@
           </el-icon>国控站点</el-option>
       </el-select>
     </div>
-    <div class="grafana-panel"><iframe
+    <div id="grafana-panel" style="left: 100px; bottom: 80px;" class="grafana-panel" draggable="true"
+      @dragstart="handleDragStart" @drag="handleDrag" @dragend="handleDragEnd"><iframe
         src="http://www.liuhongtian.com:3000/d-solo/cejr9sxk8jpj4a/e9a696-e9a1b5-e79c8b-e69dbf?orgId=1&from=1730419200000&to=1732838400000&timezone=browser&showCategory=Axis&theme=light&panelId=1&__feature.dashboardSceneSolo"
         width="450" height="200" frameborder="0"></iframe></div>
   </div>
@@ -233,6 +234,60 @@ onMounted(() => {
     initBMap()
   }
 })
+
+const dragData = ref({
+  isDragging: false,
+  startX: 0,
+  startY: 0,
+  element: null,
+  isMouseDown: false
+})
+
+// 开始拖动
+function handleDragStart(e) {
+  dragData.value.isDragging = true;
+  dragData.value.startLeft = e.clientX;
+  dragData.value.startBottom = window.innerHeight - e.clientY;
+  dragData.value.element = e.target;
+  dragData.value.isMouseDown = true;
+
+  // 设置拖动时的透明度
+  e.target.style.opacity = '0.5';
+}
+
+// 拖动中
+function handleDrag(e) {
+  if (!dragData.value.isDragging) return;
+  if(e.clientX === 0 || e.class === 0) return;
+
+  const left = e.clientX;
+  const bottom = window.innerHeight - e.clientY;
+
+  const deltaLeft = left - dragData.value.startLeft;
+  const deltaBottom = bottom - dragData.value.startBottom;
+
+  const element = dragData.value.element;
+
+  // 计算新位置
+  const newLeft = parseInt(element.style.left.slice(0, -2)) + deltaLeft;
+  const newBottom = parseInt(element.style.bottom.slice(0, -2)) + deltaBottom;
+
+  element.style.left = `${newLeft}px`;
+  element.style.bottom = `${newBottom}px`;
+
+  // 更新起始位置
+  dragData.value.startLeft = e.clientX;
+  dragData.value.startBottom = window.innerHeight - e.clientY;
+}
+
+// 拖动结束
+function handleDragEnd(e) {
+  if (!dragData.value.isDragging) return;
+
+  dragData.value.isDragging = false;
+  dragData.value.element.style.opacity = '1';
+  dragData.value.element = null;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -304,10 +359,8 @@ onMounted(() => {
 }
 
 .grafana-panel {
-  position: fixed;
+  position: absolute;
   padding: 10px;
-  bottom: 80px;
-  left:300px;
   width: 450px;
   height: 200px;
   border-radius: 5px;
@@ -315,12 +368,10 @@ onMounted(() => {
   background-color: rgba(213, 213, 213, 0.89);
   color: white;
   border: none;
-  cursor: pointer;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
   z-index: 1000;
 
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
@@ -331,5 +382,9 @@ onMounted(() => {
   flex-direction: column;
   overflow: hidden;
   resize: none;
+
+  cursor: move; // 添加可移动光标样式
+  user-select: none; // 防止拖动时选中文本
+  transition: opacity 0.2s; // 添加透明度过渡效果
 }
 </style>
